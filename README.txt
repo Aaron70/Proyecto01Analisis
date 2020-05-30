@@ -1,5 +1,8 @@
 Proyeto01
 Aaron
-Daniel prueba
+Daniel 
 Ingrid
 proyecto dificil
+Daniel prueba
+Ingrid
+
