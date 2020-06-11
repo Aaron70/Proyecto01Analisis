@@ -1,5 +1,38 @@
 ﻿Imports Proyecto01_Solitario
 
+'===============================================================
+' Carta
+'---------------------------------------------------------------
+'Proposito : Crea el molde para las cartas que se van a utilizar
+'            en el juego de solitario
+'
+' Autor : Ingrd Fernández 2020
+'         Aaron Vargas 2020
+'         Daniel Calderon 2020
+'
+' Notas   : Las cartas pertenecen a una familia
+'           
+'---------------------------------------------------------------
+' Parametros
+'-----------
+' Numero : indica el valor de cada carta.
+'                 
+' Simbolo: ayuda a definir el tipo de grupo al que pertence la carta
+' 
+' Familia: grupo al que pertenece un carta
+'
+' Visible: indica si una carta esta hacia arriba o hacia abajo 
+'          en el juego
+'---------------------------------------------------------------
+' Retorno : Un objeto tipo Carta
+'          
+'---------------------------------------------------------------
+'Historial
+'---------------------------------------------------------------
+' 11 Junio IF  : Version inicial
+' 
+'===============================================================
+
 Public Class Carta
     Private numeroCarta As Integer
     Private simboloCarta As String
