@@ -1,28 +1,27 @@
 ﻿Public Class Familia
-    Private nombre As String
-    Private color As String
+    Private nombreFamilia As String
+    Private colorFamilia As String
 
-    Public Sub New(nombre As String, color As String)
-        Me.nombre = nombre
-        Me.color = color
+    Public Sub New(nombreFamilia As String, colorFamilia As String)
+        Me.Nombre = nombreFamilia
+        Me.Color = colorFamilia
     End Sub
 
-    Public Property nombreFamilia As String
+    Public Property Nombre As String
         Get
-            Return nombre
+            Return nombreFamilia
         End Get
         Set(value As String)
-            nombre = value
+            nombreFamilia = value
         End Set
     End Property
 
-    Public Property ColorFamilia As String
+    Public Property Color As String
         Get
-            Return color
+            Return colorFamilia
         End Get
         Set(value As String)
-            color = value
+            colorFamilia = value
         End Set
     End Property
-
 End Class
