@@ -1,4 +1,34 @@
-﻿Public Class Familia
+﻿'===============================================================
+' Familia
+'---------------------------------------------------------------
+'Proposito : Crea el molde para las familias que se van a utilizar
+'            en el juego de solitario
+'
+' Autor : Ingrd Fernández 2020
+'         Aaron Vargas 2020
+'         Daniel Calderon 2020
+'
+' Notas   : Cada carta pertenece a una familia
+'           
+'---------------------------------------------------------------
+' Parametros
+'-----------
+' Nombre : Identifica a cada familia.
+'                 
+' Color: ayuda a definir el tipo de familia y el color de las
+'        cartas que pertenecen a cada familia
+' 
+'---------------------------------------------------------------
+' Retorno : Un objeto tipo Familia
+'          
+'---------------------------------------------------------------
+'Historial
+'---------------------------------------------------------------
+' 11 Junio IF  : Version inicial
+' 
+'===============================================================
+
+Public Class Familia
     Private nombreFamilia As String
     Private colorFamilia As String
 
