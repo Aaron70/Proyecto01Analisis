@@ -1,12 +1,20 @@
 ﻿Public Class Pila
     Private vacia As Boolean
-    Private elementos As List(Of Carta)
-    Private primerElemento As Carta 'El primer numero de la pila es el menor'
-    Private ultimoElemento As Carta 'El ultimo numero de la pila es el mayor'
+    Private elementos As List(Of Carta) = New List(Of Carta)
+    Private cartaMenor As Carta 'La primer carta de la pila es la menor (la que esta en el top de la pila)
+    Private cartaMayor As Carta 'La ultima carta de la pila es mayor (la que esta en el fondo de la pila)
     'En una totalmente llena el K seria el numero mayor y habria sido el primero en entrar y el As '
     Sub New()
-        elementos = New List(Of Carta) 'Inicializamos el arreglo'
-        vacia = True 'La pila inicia vacia'
+        vacia = True
+        cartaMenor = Nothing
+        cartaMayor = Nothing
+    End Sub
+
+    Sub New(nuevosElementos As List(Of Carta))
+        elementos = nuevosElementos
+        cartaMayor = nuevosElementos(0)
+        cartaMenor = nuevosElementos(nuevosElementos.Count - 1)
+        vacia = False 'La pila no inicia vacia'
     End Sub
 
     Public Property esVacia As Boolean
@@ -18,12 +26,34 @@
         End Set
     End Property
 
+
     Public Function Insert(cartas As Pila) As Boolean
-        If (ultimoElemento.numero > cartas.ultimoElemento.numero) Then 'Validamos que el numero mayor de la pila de entrada sea menor al menor de la pila en la que se desa insertar '
-            elementos.Concat(cartas.elementos)
-            vacia = False
+        If ((Not Me.esVacia And Not cartas.esVacia) AndAlso (cartaMenor.numero < +cartas.cartaMayor.numero)) Then
+            'Entra cuando la carta menor de la pila actual es menor a la carta mayor de la pila entrante
+            Return False
         End If
-        Return False
+        If (Me.esVacia) Then
+            cartaMayor = cartas.cartaMayor
+        End If
+        elementos.Concat(cartas.elementos)
+        cartaMenor = cartas.cartaMenor
+        vacia = False
+        Return True
+    End Function
+
+    Public Function SacarCartas(carta As Carta) As Pila
+        If (Not Me.esVacia) Then
+            Dim index = elementos.IndexOf(carta)
+            Dim nuevaLista As List(Of Carta) = New List(Of Carta)
+            If (index > 0) Then
+                For i = index To elementos.Count - 1
+                    nuevaLista.Add(elementos(i))
+                    elementos.Remove(elementos(i))
+                Next
+
+            End If
+        End If
+        Return Nothing
     End Function
 
 End Class
