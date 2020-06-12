@@ -80,9 +80,10 @@
             Dim p As Point = New Point(MousePosition.X - coordenadas.X, MousePosition.Y - coordenadas.Y)
             b.BringToFront()
             Dim btn As Button
-            For i = indiceAnterior(1) To APilas(indiceAnterior(0)).Count - 1
+            ''APilas(0).Controls.Item(1).Location = New Point(MousePosition.X - coordenadas.X, MousePosition.Y - coordenadas.Y + 20)
+            For i = indiceAnterior(1) + 1 To APilas(indiceAnterior(0)).Count - 1
                 btn = APilas(indiceAnterior(0))(i)
-                btn.Location = New Point(sender.left, sender.top + 40)
+                btn.Location = New Point(MousePosition.X - coordenadas.X, MousePosition.Y - coordenadas.Y + 20)
                 btn.BringToFront()
             Next
         End If
@@ -94,7 +95,7 @@
         Dim origen As Pila = Arreglo(indiceAnterior(0))
         Dim destino As Pila = Arreglo(indicesActuales(0))
         If (destino.Insert(cartas)) Then
-            b.Location = New Point((19 + AnchoCartas) * indicesActuales(0) + 13, (altoCartas * 0.3) * (Arreglo(indicesActuales(0)).Count - 1) + 10)
+            b.Location = New Point((19 + AnchoCartas) * indicesActuales(0) + 13, (altoCartas * 0.3) * (destino.Count - 1) + 10)
             b.BringToFront()
         Else
             origen.Insert(cartas)
