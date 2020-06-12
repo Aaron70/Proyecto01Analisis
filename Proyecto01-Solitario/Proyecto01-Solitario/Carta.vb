@@ -57,7 +57,7 @@ Public Class Carta
 
     Public Property simbolo As String
         Get
-            Return simbolo
+            Return simboloCarta
         End Get
         Set(value As String)
             simboloCarta = value
@@ -66,7 +66,7 @@ Public Class Carta
 
     Public Property numero As Integer
         Get
-            Return numero
+            Return numeroCarta
         End Get
         Set(value As Integer)
             numeroCarta = value
