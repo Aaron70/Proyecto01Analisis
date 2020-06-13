@@ -98,7 +98,7 @@ Public Class Pila
     End Function
 
     Public Function Insert(cartas As Pila) As Boolean
-        If (Not (Me.esVacia Or cartas.esVacia) AndAlso (cartaMenor.numero <= cartas.cartaMayor.numero)) Then
+        If (Not (Me.esVacia Or cartas.esVacia) AndAlso (cartaMenor.numero <= cartas.cartaMayor.numero Or cartaMenor.numero - cartas.cartaMayor.numero <> 1)) Then
             'Entra cuando la carta menor de la pila actual es menor a la carta mayor de la pila entrante
             Return False
         End If
@@ -118,11 +118,11 @@ Public Class Pila
             Dim index = elementos.IndexOf(carta)
             Dim ant = index
             Dim nuevaLista As Pila = New Pila()
-            If (index > 0) Then
+            If (index >= 0) Then
                 nuevaLista.Insert(elementos(index))
                 For i = index + 1 To elementos.Count - 1
                     nuevaLista.Insert(elementos(i))
-                    If (elementos(ant).familia.Nombre.Equals(elementos(i).familia.Nombre)) Then
+                    If (Not elementos(ant).familia.Nombre.Equals(elementos(i).familia.Nombre)) Then
                         Return New Pila()
                     End If
                     ant = i

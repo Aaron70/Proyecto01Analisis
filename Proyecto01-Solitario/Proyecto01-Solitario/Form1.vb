@@ -7,6 +7,7 @@
     Dim AnchoCartas As Integer = 80
     Dim altoCartas As Integer = 130
     Dim cartas As Pila
+    Dim botones As List(Of Button) = New List(Of Button)
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Arreglo = {New Pila(), New Pila(), New Pila(), New Pila(), New Pila(), New Pila(), New Pila(), New Pila(), New Pila(), New Pila()}
         APilas = {New List(Of Button), New List(Of Button), New List(Of Button), New List(Of Button),
@@ -70,6 +71,18 @@
         End If
         cartas = origen.SacarCartas(carta)
 
+        For i = indiceAnterior(1) To APilas(indiceAnterior(0)).Count - 1
+            b = APilas(indiceAnterior(0))(i)
+            If (IsNothing(cartas) OrElse cartas.esVacia()) Then
+                b.ForeColor = Color.Red
+                b.Location = posAnterior
+                botones.Clear()
+                Return
+            Else
+                botones.Add(b)
+                ''APilas(indiceAnterior(0)).Remove(b)
+            End If
+        Next
     End Sub
 
     Private Sub Drag(sender As Object, e As System.Windows.Forms.MouseEventArgs)
@@ -77,14 +90,12 @@
             sender.top = MousePosition.Y - coordenadas.Y
             sender.left = MousePosition.X - coordenadas.X
             Dim b As Button = DirectCast(sender, Button)
-            Dim p As Point = New Point(MousePosition.X - coordenadas.X, MousePosition.Y - coordenadas.Y)
             b.BringToFront()
-            Dim btn As Button
-            ''APilas(0).Controls.Item(1).Location = New Point(MousePosition.X - coordenadas.X, MousePosition.Y - coordenadas.Y + 20)
-            For i = indiceAnterior(1) + 1 To APilas(indiceAnterior(0)).Count - 1
-                btn = APilas(indiceAnterior(0))(i)
-                btn.Location = New Point(MousePosition.X - coordenadas.X, MousePosition.Y - coordenadas.Y + 20)
-                btn.BringToFront()
+            Dim y As Integer = 0
+            For Each b In botones
+                b.Location = New Point(MousePosition.X - coordenadas.X, MousePosition.Y - coordenadas.Y + ((altoCartas * 0.3) * y))
+                b.BringToFront()
+                y += 1
             Next
         End If
     End Sub
@@ -94,14 +105,32 @@
         Dim indicesActuales = ObtenerIndices(b)
         Dim origen As Pila = Arreglo(indiceAnterior(0))
         Dim destino As Pila = Arreglo(indicesActuales(0))
+        Dim y As Integer = destino.Count
         If (destino.Insert(cartas)) Then
-            b.Location = New Point((19 + AnchoCartas) * indicesActuales(0) + 13, (altoCartas * 0.3) * (destino.Count - 1) + 10)
+            b.Location = New Point((19 + AnchoCartas) * indicesActuales(0) + 13, (altoCartas * 0.3) * (y) + 10)
             b.BringToFront()
+            For Each b In botones
+                APilas(indiceAnterior(0)).Remove(b)
+                APilas(indicesActuales(0)).Add(b)
+                b.Location = New Point((19 + AnchoCartas) * indicesActuales(0) + 13, (altoCartas * 0.3) * (y) + 10)
+                b.BringToFront()
+                y += 1
+            Next
         Else
+            y = origen.Count
             origen.Insert(cartas)
             b.Location = posAnterior
             b.ForeColor = Color.Red
+            For Each b In botones
+                b.Location = New Point(posAnterior.X, (altoCartas * 0.3) * (y) + 10)
+                b.ForeColor = Color.Red
+                b.BringToFront()
+                y += 1
+            Next
         End If
+
+        botones.Clear()
+        indiceAnterior = indicesActuales
         ''b.Text = ObtenerIndices(b)(0).ToString() + "," + ObtenerIndices(b)(1).ToString()
 
     End Sub
