@@ -112,6 +112,15 @@ Public Class Pila
         Return True
     End Function
 
+    Public Function InserForce(carta As Carta)
+        If (Me.esVacia) Then
+            cartaMayor = carta
+        End If
+        elementos.Add(carta)
+        cartaMenor = carta
+        Return True
+    End Function
+
 
     Public Function SacarCartas(carta As Carta) As Pila
         If (Not Me.esVacia) Then
@@ -151,5 +160,12 @@ Public Class Pila
         Return Nothing
     End Function
 
+
+    Public Sub MostrarCartas()
+        Console.WriteLine("Cartas: ")
+        For Each carta As Carta In elementos
+            Console.WriteLine(" Numero: " + carta.numero.ToString() + "  Familia:")
+        Next
+    End Sub
 
 End Class

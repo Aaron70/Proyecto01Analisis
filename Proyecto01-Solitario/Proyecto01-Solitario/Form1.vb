@@ -13,31 +13,62 @@
         APilas = {New List(Of Button), New List(Of Button), New List(Of Button), New List(Of Button),
             New List(Of Button), New List(Of Button), New List(Of Button), New List(Of Button), New List(Of Button), New List(Of Button)}
         Panel1.AllowDrop = True
-
-
+        CreateCarta(0, 6)
+        CreateCarta(0, 5)
+        CreateCarta(0, 4)
         CreateCarta(0, 3)
         CreateCarta(0, 2)
-        CreateCarta(0, 1)
 
-        CreateCarta(1, 6)
+
         CreateCarta(1, 5)
         CreateCarta(1, 4)
         CreateCarta(1, 3)
         CreateCarta(1, 2)
+        CreateCarta(1, 1)
 
+        CreateCarta(2, 9)
+        CreateCarta(2, 8)
+        CreateCarta(2, 7)
         CreateCarta(2, 6)
         CreateCarta(2, 5)
-        CreateCarta(2, 4)
+        ''RepartirCartas()
     End Sub
 
-    Private Sub CreateCarta(pila, carta)
-        Dim familia As Familia = New Familia("Diamantes", "Rojo")
-        Dim car As Carta = New Carta(carta, "A", familia, True)
+    Private Sub RepartirCartas()
+        Dim cartasRepartidas = 0
+        Dim familia As Familia = New Familia("Diamante", "Rojo")
+        Dim Carta As Carta = New Carta(1, "A", familia, False)
+        Dim creadas = 1
+        While cartasRepartidas < 15
+
+            For index = 0 To Arreglo.Count - 1
+                If (creadas < 13) Then
+                    Carta = New Carta(Carta.numero + 1, "A", familia, False)
+                ElseIf (creadas < 26) Then
+                    familia = New Familia("Treboles", "Negro")
+                    Carta = New Carta(Carta.numero + 1, "A", familia, False)
+                ElseIf (creadas < 39) Then
+                    familia = New Familia("Bastos", "Negro")
+                    Carta = New Carta(Carta.numero + 1, "A", familia, False)
+                ElseIf (creadas < 54) Then
+                    familia = New Familia("Corazones", "Rojo")
+                    Carta = New Carta(Carta.numero + 1, "A", familia, False)
+                End If
+                cartasRepartidas += 1
+                CreateCarta(index, 0)
+            Next
+            System.Console.WriteLine("Prueba")
+        End While
+    End Sub
+
+    Private Sub CreateCarta(pila As Integer, carta As Integer)
+        Dim familia As Familia = New Familia("asd", "adf")
+        Dim car As Carta = New Carta(carta, "a", familia, True)
         Dim btn As Button = New Button()
-        If (Arreglo(pila).Insert(car)) Then
+        If (Arreglo(pila).InserForce(car)) Then
             btn.Size = New Size(AnchoCartas, altoCartas)
             btn.Location = New Point((19 + AnchoCartas) * pila + 13, (altoCartas * 0.3) * (Arreglo(pila).Count - 1) + 10)
-            btn.Text = carta.ToString()
+            btn.Text = car.numero.ToString() + car.familia.Nombre
             btn.Cursor = Cursors.Hand
 
             AddHandler btn.MouseDown, AddressOf StartDrag
