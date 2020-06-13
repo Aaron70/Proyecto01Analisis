@@ -34,9 +34,9 @@
 '===============================================================
 
 Public Class Carta
-    Private numero As Integer
-    Private simbolo As String
-    Private familia As Familia
+    Private numeroCarta As Integer
+    Private simboloCarta As String
+    Private familiaCarta As Familia
     Private visible As Boolean
 
     Public Sub New(numero As Integer, simbolo As String, familia As Familia, visible As Boolean)
@@ -55,21 +55,30 @@ Public Class Carta
         End Set
     End Property
 
-    Public Property simboloCarta As String
+    Public Property simbolo As String
         Get
-            Return simbolo
+            Return simboloCarta
         End Get
         Set(value As String)
-            simbolo = value
+            simboloCarta = value
         End Set
     End Property
 
-    Public Property numeroCarta As Integer
+    Public Property numero As Integer
         Get
-            Return numero
+            Return numeroCarta
         End Get
         Set(value As Integer)
-            numero = value
+            numeroCarta = value
+        End Set
+    End Property
+
+    Public Property familia As Familia
+        Get
+            Return familiaCarta
+        End Get
+        Set(value As Familia)
+            familiaCarta = value
         End Set
     End Property
 End Class
