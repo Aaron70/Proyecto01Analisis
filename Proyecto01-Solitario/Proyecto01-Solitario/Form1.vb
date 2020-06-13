@@ -4,8 +4,10 @@
     Dim coordenadas As Point
     Dim posAnterior As Point
     Dim indiceAnterior(2) As Integer
-    Dim AnchoCartas As Integer = 80
-    Dim altoCartas As Integer = 130
+    Dim AnchoCartas As Integer = 105
+    Dim altoCartas As Integer = 145
+    Dim porcentajeAltoNoVisible As Decimal = 0.15
+    Dim porcentajeAltoVisible As Decimal = 0.3
     Dim cartas As Pila
     Dim botones As List(Of Button) = New List(Of Button)
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -13,25 +15,9 @@
         APilas = {New List(Of Button), New List(Of Button), New List(Of Button), New List(Of Button),
             New List(Of Button), New List(Of Button), New List(Of Button), New List(Of Button), New List(Of Button), New List(Of Button)}
         Panel1.AllowDrop = True
-        CreateCarta(0, 6)
-        CreateCarta(0, 5)
-        CreateCarta(0, 4)
-        CreateCarta(0, 3)
-        CreateCarta(0, 2)
+        Me.WindowState = FormWindowState.Maximized
 
-
-        CreateCarta(1, 5)
-        CreateCarta(1, 4)
-        CreateCarta(1, 3)
-        CreateCarta(1, 2)
-        CreateCarta(1, 1)
-
-        CreateCarta(2, 9)
-        CreateCarta(2, 8)
-        CreateCarta(2, 7)
-        CreateCarta(2, 6)
-        CreateCarta(2, 5)
-        ''RepartirCartas()
+        RepartirCartas()
     End Sub
 
     Private Sub RepartirCartas()
@@ -39,7 +25,7 @@
         Dim familia As Familia = New Familia("Diamante", "Rojo")
         Dim Carta As Carta = New Carta(1, "A", familia, False)
         Dim creadas = 1
-        While cartasRepartidas < 15
+        While cartasRepartidas < 54
 
             For index = 0 To Arreglo.Count - 1
                 If (creadas < 13) Then
@@ -55,20 +41,22 @@
                     Carta = New Carta(Carta.numero + 1, "A", familia, False)
                 End If
                 cartasRepartidas += 1
-                CreateCarta(index, 0)
+                CreateCarta(index, Carta)
+                If (cartasRepartidas = 54) Then
+                    Return
+                End If
             Next
             System.Console.WriteLine("Prueba")
         End While
     End Sub
 
-    Private Sub CreateCarta(pila As Integer, carta As Integer)
-        Dim familia As Familia = New Familia("asd", "adf")
-        Dim car As Carta = New Carta(carta, "a", familia, True)
+    Private Sub CreateCarta(pila As Integer, carta As Carta)
+
         Dim btn As Button = New Button()
-        If (Arreglo(pila).InserForce(car)) Then
+        If (Arreglo(pila).InserForce(carta)) Then
             btn.Size = New Size(AnchoCartas, altoCartas)
-            btn.Location = New Point((19 + AnchoCartas) * pila + 13, (altoCartas * 0.3) * (Arreglo(pila).Count - 1) + 10)
-            btn.Text = car.numero.ToString() + car.familia.Nombre
+            btn.Location = New Point((25 + AnchoCartas) * pila + 20, (altoCartas * porcentajeAltoNoVisible) * (Arreglo(pila).Count - 1) + 10)
+            btn.Text = carta.numero.ToString() + carta.familia.Nombre
             btn.Cursor = Cursors.Hand
 
             AddHandler btn.MouseDown, AddressOf StartDrag
@@ -84,8 +72,8 @@
 
     Private Function ObtenerIndices(boton As Button)
         Dim indices(2) As Integer
-        indices(0) = (boton.Location.X - 13) / (AnchoCartas + 19)
-        indices(1) = (((boton.Location.Y) - 10) / (altoCartas * 0.3))
+        indices(0) = (boton.Location.X - 20) / (AnchoCartas + 25)
+        indices(1) = (((boton.Location.Y) - 10) / (altoCartas * porcentajeAltoNoVisible))
         Return indices
     End Function
 
@@ -124,7 +112,7 @@
             b.BringToFront()
             Dim y As Integer = 0
             For Each b In botones
-                b.Location = New Point(MousePosition.X - coordenadas.X, MousePosition.Y - coordenadas.Y + ((altoCartas * 0.3) * y))
+                b.Location = New Point(MousePosition.X - coordenadas.X, MousePosition.Y - coordenadas.Y + ((altoCartas * porcentajeAltoNoVisible) * y))
                 b.BringToFront()
                 y += 1
             Next
@@ -138,12 +126,12 @@
         Dim destino As Pila = Arreglo(indicesActuales(0))
         Dim y As Integer = destino.Count
         If (destino.Insert(cartas)) Then
-            b.Location = New Point((19 + AnchoCartas) * indicesActuales(0) + 13, (altoCartas * 0.3) * (y) + 10)
+            b.Location = New Point((25 + AnchoCartas) * indicesActuales(0) + 20, (altoCartas * porcentajeAltoNoVisible) * (y) + 10)
             b.BringToFront()
             For Each b In botones
                 APilas(indiceAnterior(0)).Remove(b)
                 APilas(indicesActuales(0)).Add(b)
-                b.Location = New Point((19 + AnchoCartas) * indicesActuales(0) + 13, (altoCartas * 0.3) * (y) + 10)
+                b.Location = New Point((25 + AnchoCartas) * indicesActuales(0) + 20, (altoCartas * porcentajeAltoNoVisible) * (y) + 10)
                 b.BringToFront()
                 y += 1
             Next
@@ -153,7 +141,7 @@
             b.Location = posAnterior
             b.ForeColor = Color.Red
             For Each b In botones
-                b.Location = New Point(posAnterior.X, (altoCartas * 0.3) * (y) + 10)
+                b.Location = New Point(posAnterior.X, (altoCartas * porcentajeAltoNoVisible) * (y) + 10)
                 b.ForeColor = Color.Red
                 b.BringToFront()
                 y += 1
