@@ -1,4 +1,4 @@
-﻿Public Class Form1
+﻿Public Class Form
     Private Arreglo(10) As Pila
     Private APilas(10) As List(Of Button)
     Dim coordenadas As Point
@@ -108,7 +108,7 @@
                 Arreglo(jugada(2)).Remove(carta)
                 APilas(jugada(1)).Add(btn)
                 APilas(jugada(2)).Remove(btn)
-                btn.Enabled = jugada(5)
+                ''btn.Enabled = jugada(5)
                 btn.Location = calcPos(jugada(1))
                 deshabilitar(jugada(1))
                 deshabilitar(jugada(2))
@@ -131,6 +131,8 @@
     Private Sub deshabilitar(pila As Integer)
         Dim visible = True
         Dim carta As Pila = Arreglo(pila)
+        Arreglo(pila).obtenerCarta(Arreglo(pila).Count - 1).esVisible = True
+        APilas(pila)(APilas(pila).Count - 1).Enabled = True
         For i = 2 To Arreglo(pila).Count
             If Not (carta.obtenerCarta(carta.Count - 1).familia.Nombre.Equals(Arreglo(pila).obtenerCarta(Arreglo(pila).Count - i).familia.Nombre)) Then
                 visible = False
@@ -231,7 +233,7 @@
         ''b.Text = ObtenerIndices(b)(0).ToString() + "," + ObtenerIndices(b)(1).ToString()
 
     End Sub
-<<<<<<< HEAD
+
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles btn_Repartir.Click
         For i = 0 To APilas.Length - 1
@@ -251,6 +253,5 @@
     Private Sub btn_volver_Click(sender As Object, e As EventArgs) Handles btn_volver.Click
         volver()
     End Sub
-=======
->>>>>>> b4284990dd12a1e8348f5c5feecb5a523a3f8e47
+
 End Class
