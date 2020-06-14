@@ -1,3 +1,15 @@
+<<<<<<< HEAD
+C:\Users\Ingrid\Documents\TEC\2020\Analisis\Proyectos\PRY1_SOLITARIO\Proyecto01Analisis\Proyecto01-Solitario\Proyecto01-Solitario\bin\Debug\Proyecto01-Solitario.exe.config
+C:\Users\Ingrid\Documents\TEC\2020\Analisis\Proyectos\PRY1_SOLITARIO\Proyecto01Analisis\Proyecto01-Solitario\Proyecto01-Solitario\bin\Debug\Proyecto01-Solitario.exe
+C:\Users\Ingrid\Documents\TEC\2020\Analisis\Proyectos\PRY1_SOLITARIO\Proyecto01Analisis\Proyecto01-Solitario\Proyecto01-Solitario\bin\Debug\Proyecto01-Solitario.pdb
+C:\Users\Ingrid\Documents\TEC\2020\Analisis\Proyectos\PRY1_SOLITARIO\Proyecto01Analisis\Proyecto01-Solitario\Proyecto01-Solitario\bin\Debug\Proyecto01-Solitario.xml
+C:\Users\Ingrid\Documents\TEC\2020\Analisis\Proyectos\PRY1_SOLITARIO\Proyecto01Analisis\Proyecto01-Solitario\Proyecto01-Solitario\obj\Debug\Proyecto01-Solitario.vbprojAssemblyReference.cache
+C:\Users\Ingrid\Documents\TEC\2020\Analisis\Proyectos\PRY1_SOLITARIO\Proyecto01Analisis\Proyecto01-Solitario\Proyecto01-Solitario\obj\Debug\Proyecto01_Solitario.Resources.resources
+C:\Users\Ingrid\Documents\TEC\2020\Analisis\Proyectos\PRY1_SOLITARIO\Proyecto01Analisis\Proyecto01-Solitario\Proyecto01-Solitario\obj\Debug\Proyecto01-Solitario.vbproj.GenerateResource.cache
+C:\Users\Ingrid\Documents\TEC\2020\Analisis\Proyectos\PRY1_SOLITARIO\Proyecto01Analisis\Proyecto01-Solitario\Proyecto01-Solitario\obj\Debug\Proyecto01-Solitario.exe
+C:\Users\Ingrid\Documents\TEC\2020\Analisis\Proyectos\PRY1_SOLITARIO\Proyecto01Analisis\Proyecto01-Solitario\Proyecto01-Solitario\obj\Debug\Proyecto01-Solitario.xml
+C:\Users\Ingrid\Documents\TEC\2020\Analisis\Proyectos\PRY1_SOLITARIO\Proyecto01Analisis\Proyecto01-Solitario\Proyecto01-Solitario\obj\Debug\Proyecto01-Solitario.pdb
+=======
 F:\Documentos\TEC\Semestre 01 2020\Analisis De Algoritmos\Proyectos\Proyecto01\Proyecto01-Solitario\Proyecto01-Solitario\bin\Debug\Proyecto01-Solitario.exe.config
 F:\Documentos\TEC\Semestre 01 2020\Analisis De Algoritmos\Proyectos\Proyecto01\Proyecto01-Solitario\Proyecto01-Solitario\bin\Debug\Proyecto01-Solitario.exe
 F:\Documentos\TEC\Semestre 01 2020\Analisis De Algoritmos\Proyectos\Proyecto01\Proyecto01-Solitario\Proyecto01-Solitario\bin\Debug\Proyecto01-Solitario.pdb
@@ -10,3 +22,5 @@ F:\Documentos\TEC\Semestre 01 2020\Analisis De Algoritmos\Proyectos\Proyecto01\P
 F:\Documentos\TEC\Semestre 01 2020\Analisis De Algoritmos\Proyectos\Proyecto01\Proyecto01-Solitario\Proyecto01-Solitario\obj\Debug\Proyecto01-Solitario.exe
 F:\Documentos\TEC\Semestre 01 2020\Analisis De Algoritmos\Proyectos\Proyecto01\Proyecto01-Solitario\Proyecto01-Solitario\obj\Debug\Proyecto01-Solitario.xml
 F:\Documentos\TEC\Semestre 01 2020\Analisis De Algoritmos\Proyectos\Proyecto01\Proyecto01-Solitario\Proyecto01-Solitario\obj\Debug\Proyecto01-Solitario.pdb
+>>>>>>> e8c0af0d907d0cff4363d4803eb0ddc1d049d826
+C:\Users\Ingrid\Documents\TEC\2020\Analisis\Proyectos\PRY1_SOLITARIO\Proyecto01Analisis\Proyecto01-Solitario\Proyecto01-Solitario\obj\Debug\Proyecto01_Solitario.Form1.resources

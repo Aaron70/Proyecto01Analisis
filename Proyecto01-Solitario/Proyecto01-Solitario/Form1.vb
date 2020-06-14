@@ -231,6 +231,7 @@
         ''b.Text = ObtenerIndices(b)(0).ToString() + "," + ObtenerIndices(b)(1).ToString()
 
     End Sub
+<<<<<<< HEAD
 
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles btn_Repartir.Click
         For i = 0 To APilas.Length - 1
@@ -250,4 +251,6 @@
     Private Sub btn_volver_Click(sender As Object, e As EventArgs) Handles btn_volver.Click
         volver()
     End Sub
+=======
+>>>>>>> b4284990dd12a1e8348f5c5feecb5a523a3f8e47
 End Class
