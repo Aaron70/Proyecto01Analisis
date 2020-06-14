@@ -39,9 +39,18 @@ Public Class Carta
     Private familiaCarta As Familia
     Private visible As Boolean
 
-    Public Sub New(numero As Integer, simbolo As String, familia As Familia, visible As Boolean)
+    Public Sub New(numero As Integer, familia As Familia, visible As Boolean)
         Me.numero = numero
-        Me.simbolo = simbolo
+        Me.simbolo = numero.ToString()
+        If (numero = 1) Then
+            simbolo = "A"
+        ElseIf (numero = 11) Then
+            simbolo = "J"
+        ElseIf (numero = 12) Then
+            simbolo = "Q"
+        ElseIf numero = 13 Then
+            simbolo = "K"
+        End If
         Me.familia = familia
         Me.visible = visible
     End Sub

@@ -31,7 +31,7 @@
 
 
 Public Class Pila
-    Private elementos As List(Of Carta) = New List(Of Carta)
+    Public elementos As List(Of Carta) = New List(Of Carta)
     Private cartaMenor As Carta 'La primer carta de la pila es la menor (la que esta en el top de la pila)
     Private cartaMayor As Carta 'La ultima carta de la pila es mayor (la que esta en el fondo de la pila)
     'En una totalmente llena el K seria el numero mayor y habria sido el primero en entrar y el As '
@@ -98,7 +98,7 @@ Public Class Pila
     End Function
 
     Public Function Insert(cartas As Pila) As Boolean
-        If (Not (Me.esVacia Or cartas.esVacia) AndAlso (cartaMenor.numero <= cartas.cartaMayor.numero Or cartaMenor.numero - cartas.cartaMayor.numero <> 1)) Then
+        If ((Not (Me.esVacia Or cartas.esVacia) AndAlso (cartaMenor.numero <= cartas.cartaMayor.numero Or cartaMenor.numero - cartas.cartaMayor.numero <> 1))) Then
             'Entra cuando la carta menor de la pila actual es menor a la carta mayor de la pila entrante
             Return False
         End If
@@ -113,12 +113,36 @@ Public Class Pila
     End Function
 
     Public Function InserForce(carta As Carta)
+        Dim inserto = True
+        If (Not esVacia() AndAlso cartaMenor.numero <= carta.numero) Then
+            'Entra cuando la carta menor de la pila actual es menor a la carta entrante
+            inserto = False
+        End If
         If (Me.esVacia) Then
             cartaMayor = carta
         End If
+        '' carta.esVisible = inserto
         elementos.Add(carta)
         cartaMenor = carta
+
+        Return inserto
+    End Function
+
+    Public Function InserForce(cartas As Pila)
+        Dim inserto = True
+        If (Not esVacia() AndAlso cartaMenor.numero <= cartas.cartaMayor.numero) Then
+            'Entra cuando la carta menor de la pila actual es menor a la carta entrante
+            inserto = False
+        End If
+        If (Me.esVacia) Then
+            cartaMayor = cartas.cartaMayor
+        End If
+        For Each carta In cartas.elementos
+            elementos.Add(carta)
+        Next
+        cartaMenor = cartas.cartaMenor
         Return True
+        Return inserto
     End Function
 
 
@@ -153,7 +177,7 @@ Public Class Pila
         Return elementos.Count
     End Function
 
-    Public Function obtenerCarta(indice)
+    Public Function obtenerCarta(indice) As Carta
         If (indice <= elementos.Count - 1 And indice > -1) Then
             Return elementos(indice)
         End If
@@ -166,6 +190,10 @@ Public Class Pila
         For Each carta As Carta In elementos
             Console.WriteLine(" Numero: " + carta.numero.ToString() + "  Familia:")
         Next
+    End Sub
+
+    Public Sub Remove(carta As Carta)
+        elementos.Remove(carta)
     End Sub
 
 End Class
