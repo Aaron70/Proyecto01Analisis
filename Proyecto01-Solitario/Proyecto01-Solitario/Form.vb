@@ -1,6 +1,6 @@
 ﻿Public Class Form
     Private Arreglo(10) As Pila
-    Private APilas(10) As List(Of Button)
+    Private APilas(10) As List(Of PictureBox)
     Dim coordenadas As Point
     Dim posAnterior As Point
     Dim indiceAnterior(2) As Integer
@@ -9,7 +9,7 @@
     Dim porcentajeAltoNoVisible As Decimal = 0.15
     Dim porcentajeAltoVisible As Decimal = 0.3
     Dim cartas As Pila
-    Dim botones As List(Of Button) = New List(Of Button)
+    Dim botones As List(Of PictureBox) = New List(Of PictureBox)
     Dim mazo As Pila = New Pila()
     Dim jugadas As Stack
     Private r As Random = New Random(Now.Millisecond)
@@ -20,8 +20,8 @@
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Arreglo = {New Pila(), New Pila(), New Pila(), New Pila(), New Pila(), New Pila(), New Pila(), New Pila(), New Pila(), New Pila()}
-        APilas = {New List(Of Button), New List(Of Button), New List(Of Button), New List(Of Button),
-            New List(Of Button), New List(Of Button), New List(Of Button), New List(Of Button), New List(Of Button), New List(Of Button)}
+        APilas = {New List(Of PictureBox), New List(Of PictureBox), New List(Of PictureBox), New List(Of PictureBox),
+            New List(Of PictureBox), New List(Of PictureBox), New List(Of PictureBox), New List(Of PictureBox), New List(Of PictureBox), New List(Of PictureBox)}
         Panel1.AllowDrop = True
         Me.WindowState = FormWindowState.Maximized
         jugadas = New Stack()
@@ -68,8 +68,9 @@
 
     Private Sub CreateCarta(pila As Integer, carta As Carta)
 
-        Dim btn As Button = New Button()
+        Dim btn As PictureBox = New PictureBox()
         Dim visible = Arreglo(pila).InserForce(carta)
+        Dim pic As PictureBox = New PictureBox()
         btn.Size = New Size(AnchoCartas, altoCartas)
         btn.Location = calcPos(pila)
         btn.Text = carta.numero.ToString() + carta.familia.Nombre
@@ -92,7 +93,7 @@
             Dim jugada = jugadas.Pop()
 
             If (jugada(0) = 0) Then ' {tipo,destino,carta,boton} //Inserccion desde el mazo
-                Dim btn As Button = jugada(3)
+                Dim btn As PictureBox = jugada(3)
                 Dim carta As Carta = jugada(2)
                 Arreglo(jugada(1)).Remove(carta)
                 Panel1.Controls.Remove(btn)
@@ -103,7 +104,7 @@
 
             ElseIf (jugada(0) = 1) Then ' {tipo,origen,destino,carta,boton,visible} //Inserccion desde el mazo
                 Dim carta As Carta = jugada(3)
-                Dim btn As Button = jugada(4)
+                Dim btn As PictureBox = jugada(4)
                 Arreglo(jugada(1)).InserForce(carta)
                 Arreglo(jugada(2)).Remove(carta)
                 APilas(jugada(1)).Add(btn)
@@ -144,7 +145,7 @@
 
 
 
-    Private Function ObtenerIndices(boton As Button)
+    Private Function ObtenerIndices(boton As PictureBox)
         Dim indices(2) As Integer
         indices(0) = (boton.Location.X - 20) / (AnchoCartas + 25)
         indices(1) = (((boton.Location.Y) - 10) / (altoCartas * porcentajeAltoNoVisible))
@@ -152,7 +153,7 @@
     End Function
 
     Private Sub StartDrag(sender As Object, e As System.Windows.Forms.MouseEventArgs)
-        Dim b As Button = DirectCast(sender, Button)
+        Dim b As PictureBox = DirectCast(sender, PictureBox)
         posAnterior = b.Location
         indiceAnterior = ObtenerIndices(b)
         coordenadas.Y = MousePosition.Y - sender.top
@@ -182,7 +183,7 @@
         If e.Button = Windows.Forms.MouseButtons.Left Then
             sender.top = MousePosition.Y - coordenadas.Y
             sender.left = MousePosition.X - coordenadas.X
-            Dim b As Button = DirectCast(sender, Button)
+            Dim b As PictureBox = DirectCast(sender, PictureBox)
             b.BringToFront()
             Dim y As Integer = 0
             For Each b In botones
@@ -194,7 +195,7 @@
     End Sub
 
     Private Sub EndDrag(sender As Object, e As System.Windows.Forms.MouseEventArgs)
-        Dim b As Button = DirectCast(sender, Button)
+        Dim b As PictureBox = DirectCast(sender, PictureBox)
         Dim indicesActuales = ObtenerIndices(b)
         Dim origen As Pila = Arreglo(indiceAnterior(0))
         Dim destino As Pila = Arreglo(indicesActuales(0))

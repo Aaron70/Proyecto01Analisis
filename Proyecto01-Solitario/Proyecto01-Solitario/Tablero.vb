@@ -126,7 +126,7 @@
             Next
         End While
         For i = 0 To pilas.Length - 1
-            mazo.obtenerCarta(mazo.Count - 1).esVisible = True
+            ''mazo.obtenerCarta(mazo.Count - 1).esVisible = True
             Dim carta As Carta = mazo.obtenerCarta(mazo.Count - 1)
             mazo.Remove(mazo.obtenerCarta(mazo.Count - 1))
             CreateCarta(i, carta)
@@ -182,6 +182,7 @@
         Dim pareja() = obtenerCarta(indicesAnteriores(0), indicesAnteriores(1))
         Dim carta As Carta = pareja(0)
         b = pareja(1)
+        b.Text = carta.simbolo
 
         If (IsNothing(carta)) Then
             MessageBox.Show("No retorno cartas")

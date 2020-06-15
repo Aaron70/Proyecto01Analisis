@@ -194,6 +194,13 @@ Public Class Pila
 
     Public Sub Remove(carta As Carta)
         elementos.Remove(carta)
+        If (esVacia()) Then
+            cartaMenor = Nothing
+            cartaMayor = Nothing
+        Else
+            cartaMenor = elementos(elementos.Count - 1)
+            cartaMayor = elementos(0)
+        End If
     End Sub
 
 End Class
