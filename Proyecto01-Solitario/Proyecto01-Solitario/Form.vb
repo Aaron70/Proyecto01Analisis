@@ -1,4 +1,6 @@
-﻿Public Class Form
+﻿Imports System.IO
+
+Public Class Form
     Private Arreglo(10) As Pila
     Private APilas(10) As List(Of PictureBox)
     Dim coordenadas As Point
@@ -13,7 +15,7 @@
     Dim mazo As Pila = New Pila()
     Dim jugadas As Stack
     Private r As Random = New Random(Now.Millisecond)
-
+    Private imagenVolteada As String = Path.Combine(Environment.CurrentDirectory, "..\..\Cartas\volteada.jpg")
     Private Function GenerarNumeroRandom(Min As Integer, Max As Integer) As Integer 'genera un numero random
         Return r.Next(Min, Max + 1)
     End Function
@@ -76,6 +78,15 @@
         btn.Text = carta.numero.ToString() + carta.familia.Nombre
         btn.Cursor = Cursors.Hand
         btn.Enabled = carta.esVisible
+
+        'colocando imagenes por carta
+        If carta.esVisible Then
+            btn.Image = Image.FromFile(carta.imagen)
+            btn.SizeMode = PictureBoxSizeMode.StretchImage
+        Else
+            btn.Image = Image.FromFile(imagenVolteada)
+            btn.SizeMode = PictureBoxSizeMode.StretchImage
+        End If
 
         AddHandler btn.MouseDown, AddressOf StartDrag
         AddHandler btn.MouseMove, AddressOf Drag
