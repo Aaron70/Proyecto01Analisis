@@ -38,6 +38,7 @@ Public Class Carta
     Private simboloCarta As String
     Private familiaCarta As Familia
     Private visible As Boolean
+    Private imagenCarta As String
 
     Public Sub New(numero As Integer, familia As Familia, visible As Boolean)
         Me.numero = numero
@@ -52,6 +53,7 @@ Public Class Carta
             simbolo = "K"
         End If
         Me.familia = familia
+        imagen = simbolo + familia.Nombre + ".jpg"
         Me.visible = visible
     End Sub
 
@@ -88,6 +90,15 @@ Public Class Carta
         End Get
         Set(value As Familia)
             familiaCarta = value
+        End Set
+    End Property
+
+    Public Property imagen As String
+        Get
+            Return imagenCarta
+        End Get
+        Set(value As String)
+            imagenCarta = value
         End Set
     End Property
 End Class

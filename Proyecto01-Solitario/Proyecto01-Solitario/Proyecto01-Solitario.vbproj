@@ -133,5 +133,61 @@
     </None>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Cartas\10corazones.jpg" />
+    <Content Include="Cartas\10diamantes.jpg" />
+    <Content Include="Cartas\10picas.jpg" />
+    <Content Include="Cartas\10treboles.jpg" />
+    <Content Include="Cartas\2corazones.jpg" />
+    <Content Include="Cartas\2diamantes.jpg" />
+    <Content Include="Cartas\2picas.jpg" />
+    <Content Include="Cartas\2treboles.jpg" />
+    <Content Include="Cartas\3corazones.jpg" />
+    <Content Include="Cartas\3diamantes.jpg" />
+    <Content Include="Cartas\3picas.jpg" />
+    <Content Include="Cartas\3treboles.jpg" />
+    <Content Include="Cartas\4corazones.jpg" />
+    <Content Include="Cartas\4diamantes.jpg" />
+    <Content Include="Cartas\4picas.jpg" />
+    <Content Include="Cartas\4treboles.jpg" />
+    <Content Include="Cartas\5corazones.jpg" />
+    <Content Include="Cartas\5diamantes.jpg" />
+    <Content Include="Cartas\5picas.jpg" />
+    <Content Include="Cartas\5treboles.jpg" />
+    <Content Include="Cartas\6corazones.jpg" />
+    <Content Include="Cartas\6diamantes.jpg" />
+    <Content Include="Cartas\6picas.jpg" />
+    <Content Include="Cartas\6treboles.jpg" />
+    <Content Include="Cartas\7corazones.jpg" />
+    <Content Include="Cartas\7diamantes.jpg" />
+    <Content Include="Cartas\7picas.jpg" />
+    <Content Include="Cartas\7treboles.jpg" />
+    <Content Include="Cartas\8corazones.jpg" />
+    <Content Include="Cartas\8diamantes.jpg" />
+    <Content Include="Cartas\8picas.jpg" />
+    <Content Include="Cartas\8treboles.jpg" />
+    <Content Include="Cartas\9corazones.jpg" />
+    <Content Include="Cartas\9diamantes.jpg" />
+    <Content Include="Cartas\9picas.jpg" />
+    <Content Include="Cartas\9treboles.jpg" />
+    <Content Include="Cartas\Acorazones.jpg" />
+    <Content Include="Cartas\Adiamantes.jpg" />
+    <Content Include="Cartas\Apicas.jpg" />
+    <Content Include="Cartas\Atreboles.jpg" />
+    <Content Include="Cartas\jcorazones.jpg" />
+    <Content Include="Cartas\jdiamantes.jpg" />
+    <Content Include="Cartas\jpicas.jpg" />
+    <Content Include="Cartas\jtreboles.jpg" />
+    <Content Include="Cartas\kcorazones.jpg" />
+    <Content Include="Cartas\Kdiamantes.jpg" />
+    <Content Include="Cartas\kpicas.jpg" />
+    <Content Include="Cartas\ktreboles.jpg" />
+    <Content Include="Cartas\Qcorazones.jpg" />
+    <Content Include="Cartas\Qdiamantes.jpg" />
+    <Content Include="Cartas\Qpicas.jpg" />
+    <Content Include="Cartas\Qtreboles.jpg" />
+    <Content Include="Cartas\volteada.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

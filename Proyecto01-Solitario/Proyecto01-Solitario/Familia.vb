@@ -34,7 +34,7 @@ Public Class Familia
 
     Public Sub New(nombreFamilia As String)
         Me.Nombre = nombreFamilia
-        If (nombreFamilia.Equals("Diamantes") Or nombreFamilia.Equals("Corazones")) Then
+        If (nombreFamilia.Equals("diamantes") Or nombreFamilia.Equals("corazones")) Then
             colorFamilia = "Rojo"
         Else
             colorFamilia = "Negro"

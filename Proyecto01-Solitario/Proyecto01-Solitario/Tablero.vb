@@ -1,4 +1,6 @@
-﻿Public Class Tablero
+﻿Imports System.IO
+
+Public Class Tablero
     Private pilas(10) As Pila
     Private botones(10) As List(Of Button)
     Private indicesAnteriores(2) As Integer
@@ -98,6 +100,7 @@
         btn.Location = calcularPosicion(pila, pilas(pila).Count - 1)
         btn.Text = carta.numero.ToString() + carta.familia.Nombre
         btn.Cursor = Cursors.Hand
+
 
         botones(pila).Add(btn)
         deshabilitar(pila)

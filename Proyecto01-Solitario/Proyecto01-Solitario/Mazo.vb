@@ -60,7 +60,7 @@ Public Class Mazo
     End Property
 
     Private Sub inicializarCartas()
-        Dim familias() As Familia = {New Familia("Diamentes"), New Familia("Corazones"), New Familia("Picas"), New Familia("Treboles")}
+        Dim familias() As Familia = {New Familia("diamantes"), New Familia("corazones"), New Familia("picas"), New Familia("treboles")}
         Dim familiaIndex = 0
         For Each familia In familias
             For i = 1 To 13
