@@ -34,10 +34,28 @@ Public Class Mazo
     Private listaCartasMazo As List(Of Carta) = New List(Of Carta)
     Private esVacio As Boolean
     Private r As Random = New Random(Now.Millisecond)
-    Private cartasPorFamilia() As List(Of Carta) = {New List(Of Carta), New List(Of Carta), New List(Of Carta), New List(Of Carta)}
-
+    Private cartasPorFamilia() As List(Of Carta)
+    Private cantidadFamilias As Integer = 4
+    Private familias(4) As Familia
     Public Sub New()
         Me.Vacio = True
+        cartasPorFamilia = {New List(Of Carta), New List(Of Carta), New List(Of Carta), New List(Of Carta)}
+        familias = {New Familia("diamantes"), New Familia("corazones"), New Familia("picas"), New Familia("treboles")}
+        inicializarCartas()
+    End Sub
+
+    Public Sub New(cantFamilias)
+        Me.Vacio = True
+        cantidadFamilias = cantFamilias
+        cartasPorFamilia = {New List(Of Carta), New List(Of Carta), New List(Of Carta), New List(Of Carta)}
+        If (cantFamilias = 1) Then
+            familias = {New Familia("picas"), New Familia("picas"), New Familia("picas"), New Familia("picas")}
+        ElseIf (cantFamilias = 2) Then
+            familias = {New Familia("diamantes"), New Familia("diamantes"), New Familia("treboles"), New Familia("treboles")}
+        Else
+            familias = {New Familia("diamantes"), New Familia("corazones"), New Familia("picas"), New Familia("treboles")}
+            cantidadFamilias = 4
+        End If
         inicializarCartas()
     End Sub
 
@@ -60,7 +78,7 @@ Public Class Mazo
     End Property
 
     Private Sub inicializarCartas()
-        Dim familias() As Familia = {New Familia("diamantes"), New Familia("corazones"), New Familia("picas"), New Familia("treboles")}
+
         Dim familiaIndex = 0
         For Each familia In familias
             For i = 1 To 13
