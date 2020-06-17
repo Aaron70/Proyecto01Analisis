@@ -1,5 +1,5 @@
 ﻿Imports Proyecto01_Solitario
-
+Imports System.IO
 '===============================================================
 ' Carta
 '---------------------------------------------------------------
@@ -38,6 +38,7 @@ Public Class Carta
     Private simboloCarta As String
     Private familiaCarta As Familia
     Private visible As Boolean
+    Private mobilbe As Boolean
     Private imagenCarta As String
 
     Public Sub New(numero As Integer, familia As Familia, visible As Boolean)
@@ -53,7 +54,8 @@ Public Class Carta
             simbolo = "K"
         End If
         Me.familia = familia
-        imagen = simbolo + familia.Nombre + ".jpg"
+        Dim imagePath As String = Path.Combine(Environment.CurrentDirectory, "..\..\Cartas\" + simbolo + familia.Nombre + ".jpg")
+        imagen = imagePath
         Me.visible = visible
     End Sub
 
@@ -99,6 +101,15 @@ Public Class Carta
         End Get
         Set(value As String)
             imagenCarta = value
+        End Set
+    End Property
+
+    Public Property esMobilbe As Boolean
+        Get
+            Return mobilbe
+        End Get
+        Set(value As Boolean)
+            mobilbe = value
         End Set
     End Property
 End Class

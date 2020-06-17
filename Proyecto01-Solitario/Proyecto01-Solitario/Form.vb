@@ -72,6 +72,7 @@ Public Class Form
 
         Dim btn As PictureBox = New PictureBox()
         Dim visible = Arreglo(pila).InserForce(carta)
+        Dim pic As PictureBox = New PictureBox()
         btn.Size = New Size(AnchoCartas, altoCartas)
         btn.Location = calcPos(pila)
         btn.Text = carta.numero.ToString() + carta.familia.Nombre
@@ -80,8 +81,7 @@ Public Class Form
 
         'colocando imagenes por carta
         If carta.esVisible Then
-            Dim imagePath As String = Path.Combine(Environment.CurrentDirectory, "..\..\Cartas\" + carta.imagen)
-            btn.Image = Image.FromFile(imagePath)
+            btn.Image = Image.FromFile(carta.imagen)
             btn.SizeMode = PictureBoxSizeMode.StretchImage
         Else
             btn.Image = Image.FromFile(imagenVolteada)
@@ -99,7 +99,7 @@ Public Class Form
 
     End Sub
 
-    Private Function volver()
+    Private Sub volver()
         If (jugadas.Count > 0) Then
             Dim jugada = jugadas.Pop()
 
@@ -127,7 +127,7 @@ Public Class Form
 
             End If
         End If
-    End Function
+    End Sub
 
     Private Sub deshabilitar(pila As Integer, carta As Carta)
         Dim visible = True

@@ -155,7 +155,7 @@ Public Class Pila
                 nuevaLista.Insert(elementos(index))
                 For i = index + 1 To elementos.Count - 1
                     nuevaLista.Insert(elementos(i))
-                    If (Not elementos(ant).familia.Nombre.Equals(elementos(i).familia.Nombre)) Then
+                    If (Not elementos(ant).familia.Nombre.Equals(elementos(i).familia.Nombre) Or elementos(ant).numero - elementos(i).numero <> 1) Then
                         Return New Pila()
                     End If
                     ant = i
@@ -194,6 +194,13 @@ Public Class Pila
 
     Public Sub Remove(carta As Carta)
         elementos.Remove(carta)
+        If (esVacia()) Then
+            cartaMenor = Nothing
+            cartaMayor = Nothing
+        Else
+            cartaMenor = elementos(elementos.Count - 1)
+            cartaMayor = elementos(0)
+        End If
     End Sub
 
 End Class
