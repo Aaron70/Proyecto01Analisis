@@ -203,4 +203,27 @@ Public Class Pila
         End If
     End Sub
 
+    Public Function validarComlumnaKAS(cartas As Pila)
+        If (Me.Count + cartas.Count >= 13) Then
+            If (cartas.obtenerCarta(cartas.Count - 1).numero = 1) Then
+                Dim temp = cartaMenor
+                Dim ant = cartas.cartaMayor
+                For i = 1 To Count()
+                    If (Not temp.familia.Nombre.Equals(ant.familia.Nombre) Or temp.numero - ant.numero <> 1) Then
+                        Return -1
+                    ElseIf (temp.numero = 13) Then
+                        Return Count() - i
+                    Else
+                        ant = temp
+                        temp = elementos(elementos.Count - (i + 1))
+                    End If
+                Next
+                If (temp.numero = 13) Then
+                    Return 0
+                End If
+            End If
+        End If
+        Return -1
+    End Function
+
 End Class
