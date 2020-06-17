@@ -23,3 +23,5 @@ C:\Users\Ingrid\Documents\TEC\2020\Analisis\Proyectos\PRY1_SOLITARIO\Proyecto01A
 C:\Users\Ingrid\Documents\TEC\2020\Analisis\Proyectos\PRY1_SOLITARIO\Proyecto01Analisis\Proyecto01-Solitario\Proyecto01-Solitario\obj\Debug\Proyecto01-Solitario.exe
 C:\Users\Ingrid\Documents\TEC\2020\Analisis\Proyectos\PRY1_SOLITARIO\Proyecto01Analisis\Proyecto01-Solitario\Proyecto01-Solitario\obj\Debug\Proyecto01-Solitario.xml
 C:\Users\Ingrid\Documents\TEC\2020\Analisis\Proyectos\PRY1_SOLITARIO\Proyecto01Analisis\Proyecto01-Solitario\Proyecto01-Solitario\obj\Debug\Proyecto01-Solitario.pdb
+C:\Users\Ingrid\Documents\TEC\2020\Analisis\Proyectos\PRY1_SOLITARIO\Proyecto01Analisis\Proyecto01-Solitario\Proyecto01-Solitario\obj\Debug\Proyecto01_Solitario.Barajas.resources
+C:\Users\Ingrid\Documents\TEC\2020\Analisis\Proyectos\PRY1_SOLITARIO\Proyecto01Analisis\Proyecto01-Solitario\Proyecto01-Solitario\obj\Debug\Proyecto01_Solitario.Main.resources

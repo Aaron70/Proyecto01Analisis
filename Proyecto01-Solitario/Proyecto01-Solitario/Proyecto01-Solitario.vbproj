@@ -73,6 +73,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Barajas.Designer.vb">
+      <DependentUpon>Barajas.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Barajas.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Carta.vb" />
     <Compile Include="Familia.vb" />
     <Compile Include="Form.vb">
@@ -80,6 +86,12 @@
     </Compile>
     <Compile Include="Form.Designer.vb">
       <DependentUpon>Form.vb</DependentUpon>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Main.Designer.vb">
+      <DependentUpon>Main.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Main.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Mazo.vb" />
@@ -108,8 +120,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Barajas.resx">
+      <DependentUpon>Barajas.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form.resx">
       <DependentUpon>Form.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Main.resx">
+      <DependentUpon>Main.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
