@@ -99,7 +99,7 @@ Public Class Form
 
     End Sub
 
-    Private Function volver()
+    Private Sub volver()
         If (jugadas.Count > 0) Then
             Dim jugada = jugadas.Pop()
 
@@ -127,7 +127,7 @@ Public Class Form
 
             End If
         End If
-    End Function
+    End Sub
 
     Private Sub deshabilitar(pila As Integer, carta As Carta)
         Dim visible = True
