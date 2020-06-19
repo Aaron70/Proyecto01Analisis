@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 
 Public Class Form
+
     Private Arreglo(10) As Pila
     Private APilas(10) As List(Of PictureBox)
     Dim coordenadas As Point
