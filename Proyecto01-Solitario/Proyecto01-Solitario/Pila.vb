@@ -31,9 +31,18 @@
 
 
 Public Class Pila
-    Public elementos As List(Of Carta) = New List(Of Carta)
+    Private elementos As List(Of Carta) = New List(Of Carta)
     Private cartaMenor As Carta 'La primer carta de la pila es la menor (la que esta en el top de la pila)
     Private cartaMayor As Carta 'La ultima carta de la pila es mayor (la que esta en el fondo de la pila)
+
+    Public Property getElementos As List(Of Carta)
+        Get
+            Return elementos
+        End Get
+        Set(value As List(Of Carta))
+            elementos = value
+        End Set
+    End Property
     'En una totalmente llena el K seria el numero mayor y habria sido el primero en entrar y el As '
     Sub New()
         cartaMenor = Nothing

@@ -30,39 +30,45 @@ Partial Class Barajas
         '
         'NumeroBarajas
         '
-        Me.NumeroBarajas.Location = New System.Drawing.Point(152, 87)
+        Me.NumeroBarajas.Location = New System.Drawing.Point(203, 107)
+        Me.NumeroBarajas.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.NumeroBarajas.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.NumeroBarajas.Name = "NumeroBarajas"
-        Me.NumeroBarajas.Size = New System.Drawing.Size(120, 20)
+        Me.NumeroBarajas.Size = New System.Drawing.Size(160, 22)
         Me.NumeroBarajas.TabIndex = 0
+        Me.NumeroBarajas.Value = New Decimal(New Integer() {1, 0, 0, 0})
         '
         'Label1
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(12, 87)
+        Me.Label1.Location = New System.Drawing.Point(16, 107)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(134, 15)
+        Me.Label1.Size = New System.Drawing.Size(156, 18)
         Me.Label1.TabIndex = 1
         Me.Label1.Text = "Numero de barajas:"
         '
         'CrearBarajas
         '
-        Me.CrearBarajas.Location = New System.Drawing.Point(96, 130)
+        Me.CrearBarajas.Location = New System.Drawing.Point(128, 160)
+        Me.CrearBarajas.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.CrearBarajas.Name = "CrearBarajas"
-        Me.CrearBarajas.Size = New System.Drawing.Size(75, 23)
+        Me.CrearBarajas.Size = New System.Drawing.Size(100, 28)
         Me.CrearBarajas.TabIndex = 2
         Me.CrearBarajas.Text = "Crear"
         Me.CrearBarajas.UseVisualStyleBackColor = True
         '
         'Barajas
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.AppWorkspace
-        Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.ClientSize = New System.Drawing.Size(1067, 554)
         Me.Controls.Add(Me.CrearBarajas)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.NumeroBarajas)
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.Name = "Barajas"
         Me.Text = "Barajas"
         CType(Me.NumeroBarajas, System.ComponentModel.ISupportInitialize).EndInit()

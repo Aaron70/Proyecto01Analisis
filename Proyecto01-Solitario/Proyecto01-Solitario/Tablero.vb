@@ -1,17 +1,22 @@
-﻿Imports System.IO
+﻿Imports System.ComponentModel
+Imports System.IO
 
 Public Class Tablero
-    Private pilas(10) As Pila
-    Private botones(10) As List(Of PictureBox)
+    Private pilas(9) As Pila
+    Private botones(9) As List(Of PictureBox)
     Private indicesAnteriores(2) As Integer
     Private cartasSeleccionadas As Pila
     Private botonesSeleccionados As List(Of PictureBox)
     Private mazo As Pila
+    Private mazoSeleccionado As Integer = 1
+    Private mazoAnt As Integer = 0
     Private registro As Stack
     Private random As Random
     Private coordenadas As Point
     Private imagenVolteada As String = Path.Combine(Environment.CurrentDirectory, "..\..\Cartas\volteada.jpg")
     Private faltan As Integer = 8
+    Private jugando As Boolean = False
+
 
 
     Private ANCHOCARTAS As Integer = 105
@@ -23,30 +28,85 @@ Public Class Tablero
         panel_contenedor.AllowDrop = True
         Me.WindowState = FormWindowState.Maximized
 
+        random = New Random(Now.Millisecond)
+        panel_contenedor.Controls.Clear()
         pilas = {New Pila(), New Pila(), New Pila(), New Pila(), New Pila(), New Pila(), New Pila(), New Pila(), New Pila(), New Pila()}
         botones = {New List(Of PictureBox), New List(Of PictureBox), New List(Of PictureBox), New List(Of PictureBox),
             New List(Of PictureBox), New List(Of PictureBox), New List(Of PictureBox), New List(Of PictureBox), New List(Of PictureBox), New List(Of PictureBox)}
         registro = New Stack()
-        random = New Random(Now.Millisecond)
         coordenadas = New Point()
         botonesSeleccionados = New List(Of PictureBox)
         cartasSeleccionadas = New Pila()
+        CambiarMazo()
+    End Sub
 
-        Dim Mazo1 As Mazo = New Mazo(1)
-        Dim Mazo2 As Mazo = New Mazo(1)
-        Mazo1.barajarCartas()
-        Mazo2.barajarCartas()
-        UnirMazos(Mazo1, Mazo2)
 
-        RepartirCartas()
-        registro.Clear()
+
+    Private Function copiarListas(ByVal original As List(Of Carta), ByVal copia As List(Of Carta))
+        Dim cant = original.Count - 1
+        Dim orgCopy = original.ToArray().Clone()
+        Dim copy(cant) As Carta
+        For ind = 0 To cant
+            copy(ind) = orgCopy(ind)
+        Next
+        Return copy.ToList()
+    End Function
+
+    Private Sub CambiarMazo()
+        If (Not IsNothing(pilas) And Not IsNothing(pilas(0))) Then
+            panel_contenedor.Controls.Clear()
+            controlJuego(jugando)
+            controlIndicadores(Not jugando)
+            pilas = {New Pila(), New Pila(), New Pila(), New Pila(), New Pila(), New Pila(), New Pila(), New Pila(), New Pila(), New Pila()}
+            botones = {New List(Of PictureBox), New List(Of PictureBox), New List(Of PictureBox), New List(Of PictureBox),
+            New List(Of PictureBox), New List(Of PictureBox), New List(Of PictureBox), New List(Of PictureBox), New List(Of PictureBox), New List(Of PictureBox)}
+            mazo = New Pila()
+            mazo.getElementos = copiarListas(Barajas.reparticiones(mazoSeleccionado - 1).getElementos, mazo.getElementos)
+            RepartirCartas()
+            registro.Clear()
+        End If
+    End Sub
+
+    Private Sub controlJuego(flag)
+        btn_atras.Enabled = flag
+        btn_atras.Visible = flag
+        panel_contenedor.Controls.Add(btn_atras)
+
+        btn_Repartir.Enabled = flag
+        btn_Repartir.Visible = flag
+        panel_contenedor.Controls.Add(btn_Repartir)
+
+    End Sub
+
+    Private Sub controlIndicadores(flag)
+        btnAnterior.Visible = flag
+        btnAnterior.Enabled = flag
+        panel_contenedor.Controls.Add(btnAnterior)
+
+        btnSiguiente.Visible = flag
+        btnSiguiente.Enabled = flag
+        panel_contenedor.Controls.Add(btnSiguiente)
+
+        btnJugar.Visible = flag
+        btnJugar.Enabled = flag
+        panel_contenedor.Controls.Add(btnJugar)
+
+        lbNumeroTablero.Visible = flag
+        panel_contenedor.Controls.Add(lbNumeroTablero)
+
+        nudNumeroTablero.Visible = flag
+        panel_contenedor.Controls.Add(nudNumeroTablero)
+
     End Sub
 
     Private Function calcularPosicion(pila, pos) As Point
         Return New Point((25 + ANCHOCARTAS) * pila + 20, (LARGOCARTAS * PORCENTAJELARGONOVISIBLE) * (pos) + 10)
     End Function
 
-    Private Function GenerarNumeroRandom(Min As Integer, Max As Integer) As Integer 'genera un numero random
+    Public Function GenerarNumeroRandom(Min As Integer, Max As Integer) As Integer 'genera un numero random
+        If (IsNothing(random)) Then
+            random = New Random(Now.Millisecond)
+        End If
         Return random.Next(Min, Max + 1)
     End Function
 
@@ -120,7 +180,7 @@ Public Class Tablero
         Next
     End Sub
 
-    Private Sub CreateCarta(pila As Integer, carta As Carta)
+    Private Sub CreateCarta(pila As Integer, carta As Carta, flag As Boolean)
 
         Dim btn As PictureBox = New PictureBox()
         pilas(pila).InserForce(carta)
@@ -136,9 +196,9 @@ Public Class Tablero
         Else
             btn.Image = Image.FromFile(imagenVolteada)
             btn.SizeMode = PictureBoxSizeMode.StretchImage
-            btn.Enabled = False
-        End If
 
+        End If
+        btn.Enabled = flag
 
 
         botones(pila).Add(btn)
@@ -163,7 +223,7 @@ Public Class Tablero
                 End If
                 Dim carta As Carta = mazo.obtenerCarta(mazo.Count - 1)
                 mazo.Remove(mazo.obtenerCarta(mazo.Count - 1))
-                CreateCarta(i, carta)
+                CreateCarta(i, carta, False)
                 contador -= 1
             Next
         End While
@@ -172,7 +232,7 @@ Public Class Tablero
             Dim carta As Carta = mazo.obtenerCarta(mazo.Count - 1)
             mazo.Remove(mazo.obtenerCarta(mazo.Count - 1))
             carta.esVisible = True
-            CreateCarta(i, carta)
+            CreateCarta(i, carta, False)
             ''deshabilitar(i)
         Next
     End Sub
@@ -384,9 +444,9 @@ Public Class Tablero
                 Dim jugada
                 For Each b In botonesSeleccionados
                     If (original.Equals(b)) Then
-                        jugada = {1, indicesAnteriores(0), indicesActuales(0), cartasSeleccionadas.elementos(i), b, activada}
+                        jugada = {1, indicesAnteriores(0), indicesActuales(0), cartasSeleccionadas.getElementos(i), b, activada}
                     Else
-                        jugada = {1, indicesAnteriores(0), indicesActuales(0), cartasSeleccionadas.elementos(i), b, Nothing}
+                        jugada = {1, indicesAnteriores(0), indicesActuales(0), cartasSeleccionadas.getElementos(i), b, Nothing}
                     End If
                     i += 1
                     registro.Push(jugada)
@@ -427,7 +487,7 @@ Public Class Tablero
                 Dim carta As Carta = mazo.obtenerCarta(mazo.Count - 1)
                 mazo.Remove(mazo.obtenerCarta(mazo.Count - 1))
                 carta.esVisible = True
-                CreateCarta(i, carta)
+                CreateCarta(i, carta, True)
             Else
                 btn_Repartir.Enabled = False
                 Return
@@ -440,5 +500,40 @@ Public Class Tablero
 
     Private Sub btn_atras_Click(sender As Object, e As EventArgs) Handles btn_atras.Click
         volver()
+    End Sub
+
+    Private Sub btnSiguiente_Click(sender As Object, e As EventArgs) Handles btnSiguiente.Click
+        nudNumeroTablero.Value += 1
+    End Sub
+
+    Private Sub nudNumeroTablero_ValueChanged(sender As Object, e As EventArgs) Handles nudNumeroTablero.ValueChanged
+        If (nudNumeroTablero.Value >= Barajas.reparticiones.Count) Then
+            nudNumeroTablero.Value = 1
+        End If
+        If (nudNumeroTablero.Value < 1) Then
+            nudNumeroTablero.Value = Barajas.reparticiones.Count
+        End If
+        mazoSeleccionado = nudNumeroTablero.Value
+        CambiarMazo()
+    End Sub
+
+    Private Sub btnJugar_Click(sender As Object, e As EventArgs) Handles btnJugar.Click
+        For i = 0 To pilas.Length - 1
+            For j = 0 To pilas(i).Count - 1
+                If (pilas(i).obtenerCarta(j).esVisible) Then
+                    botones(i)(j).Enabled = True
+                End If
+            Next
+        Next
+        controlJuego(True)
+        controlIndicadores(False)
+    End Sub
+
+    Private Sub Tablero_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
+        Main.Visible = True
+    End Sub
+
+    Private Sub btnAnterior_Click(sender As Object, e As EventArgs) Handles btnAnterior.Click
+        nudNumeroTablero.Value -= 1
     End Sub
 End Class
