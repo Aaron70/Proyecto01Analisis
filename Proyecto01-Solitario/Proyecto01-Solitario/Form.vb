@@ -219,7 +219,7 @@ Public Class Form
             b.BringToFront()
             Dim i = 0
             For Each b In botones
-                Dim jugada = {1, indiceAnterior(0), indicesActuales(0), cartas.elementos(i), b, b.Enabled}
+                Dim jugada = {1, indiceAnterior(0), indicesActuales(0), cartas.getElementos(i), b, b.Enabled}
                 i += 1
                 jugadas.Push(jugada)
                 APilas(indiceAnterior(0)).Remove(b)
