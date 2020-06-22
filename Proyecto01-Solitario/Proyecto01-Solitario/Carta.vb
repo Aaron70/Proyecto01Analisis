@@ -65,6 +65,9 @@ Public Class Carta
         End Get
         Set(value As Boolean)
             visible = value
+            If (Not value) Then
+                mobilbe = False
+            End If
         End Set
     End Property
 
@@ -110,6 +113,9 @@ Public Class Carta
         End Get
         Set(value As Boolean)
             mobilbe = value
+            If (value) Then
+                visible = value
+            End If
         End Set
     End Property
 End Class

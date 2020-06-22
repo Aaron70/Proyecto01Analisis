@@ -29,7 +29,9 @@ Partial Class Tablero
         Me.lbNumeroTablero = New System.Windows.Forms.Label()
         Me.nudNumeroTablero = New System.Windows.Forms.NumericUpDown()
         Me.btn_atras = New System.Windows.Forms.Button()
-        Me.btn_Repartir = New System.Windows.Forms.Button()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Puntaje = New System.Windows.Forms.Label()
         Me.panel_contenedor.SuspendLayout()
         CType(Me.nudNumeroTablero, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -41,13 +43,15 @@ Partial Class Tablero
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.panel_contenedor.BackColor = System.Drawing.SystemColors.ControlDark
+        Me.panel_contenedor.Controls.Add(Me.Puntaje)
+        Me.panel_contenedor.Controls.Add(Me.Label2)
+        Me.panel_contenedor.Controls.Add(Me.Label1)
         Me.panel_contenedor.Controls.Add(Me.btnSiguiente)
         Me.panel_contenedor.Controls.Add(Me.btnJugar)
         Me.panel_contenedor.Controls.Add(Me.btnAnterior)
         Me.panel_contenedor.Controls.Add(Me.lbNumeroTablero)
         Me.panel_contenedor.Controls.Add(Me.nudNumeroTablero)
         Me.panel_contenedor.Controls.Add(Me.btn_atras)
-        Me.panel_contenedor.Controls.Add(Me.btn_Repartir)
         Me.panel_contenedor.Location = New System.Drawing.Point(0, 0)
         Me.panel_contenedor.Name = "panel_contenedor"
         Me.panel_contenedor.Size = New System.Drawing.Size(1336, 701)
@@ -100,23 +104,40 @@ Partial Class Tablero
         '
         'btn_atras
         '
-        Me.btn_atras.Location = New System.Drawing.Point(17, 638)
+        Me.btn_atras.Location = New System.Drawing.Point(187, 12)
         Me.btn_atras.Name = "btn_atras"
         Me.btn_atras.Size = New System.Drawing.Size(71, 42)
         Me.btn_atras.TabIndex = 1
         Me.btn_atras.Text = "Atras"
         Me.btn_atras.UseVisualStyleBackColor = True
         '
-        'btn_Repartir
+        'Label1
         '
-        Me.btn_Repartir.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
-        Me.btn_Repartir.Location = New System.Drawing.Point(102, 638)
-        Me.btn_Repartir.Name = "btn_Repartir"
-        Me.btn_Repartir.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.btn_Repartir.Size = New System.Drawing.Size(71, 42)
-        Me.btn_Repartir.TabIndex = 0
-        Me.btn_Repartir.Text = "Repartir"
-        Me.btn_Repartir.UseVisualStyleBackColor = True
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(185, 591)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(73, 17)
+        Me.Label1.TabIndex = 7
+        Me.Label1.Text = "Undefined"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(254, 591)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(73, 17)
+        Me.Label2.TabIndex = 8
+        Me.Label2.Text = "Undefined"
+        '
+        'Puntaje
+        '
+        Me.Puntaje.AutoSize = True
+        Me.Puntaje.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Puntaje.Location = New System.Drawing.Point(284, 13)
+        Me.Puntaje.Name = "Puntaje"
+        Me.Puntaje.Size = New System.Drawing.Size(108, 24)
+        Me.Puntaje.TabIndex = 9
+        Me.Puntaje.Text = "Puntos: 500"
         '
         'Tablero
         '
@@ -134,11 +155,13 @@ Partial Class Tablero
     End Sub
 
     Friend WithEvents panel_contenedor As Panel
-    Friend WithEvents btn_Repartir As Button
     Friend WithEvents btn_atras As Button
     Friend WithEvents lbNumeroTablero As Label
     Friend WithEvents nudNumeroTablero As NumericUpDown
     Friend WithEvents btnSiguiente As Button
     Friend WithEvents btnJugar As Button
     Friend WithEvents btnAnterior As Button
+    Friend WithEvents Label2 As Label
+    Friend WithEvents Label1 As Label
+    Friend WithEvents Puntaje As Label
 End Class
