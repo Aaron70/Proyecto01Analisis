@@ -117,6 +117,129 @@ Public Class Tablero
 
     End Sub
 
+    Private Function voltearCarta(pos)
+        Dim pila As Pila = pilas(pos)
+        Dim carta As Carta = pila.obtenerCarta(pila.Count - 1)
+
+        If (pila.Count > 0 AndAlso Not carta.esVisible) Then
+            Dim boton As PictureBox = botones(pos)(botones(pos).Count - 1)
+            carta.esVisible = True
+            carta.esMobilbe = True
+            boton.Enabled = True
+            boton.Image = Image.FromFile(carta.imagen)
+            boton.SizeMode = PictureBoxSizeMode.StretchImage
+            Return False
+        End If
+
+        Return True
+    End Function
+
+    Private Sub AgarrarCartas(posPila As Integer, Optional posFila As Integer = -1)
+        Dim origen As Pila = pilas(posPila)
+        If (posFila = -1) Then posFila = origen.Count - 1
+        Dim cartaABuscar = origen.obtenerCarta(posFila)
+        Dim listaCartas As Pila = origen.SacarCartas(cartaABuscar)
+        Dim listaBotones As List(Of PictureBox) = New List(Of PictureBox)
+        'Selecciona y saca de la pila las cartas y botones'
+        For i = posFila To listaCartas.Count - 1
+            origen.Remove(listaCartas.obtenerCarta(i))
+            listaBotones.Add(botones(posPila)(i))
+            botones(posPila).Remove(botones(posPila)(i))
+        Next
+
+        cartasSeleccionadas = listaCartas
+        botonesSeleccionados = listaBotones
+    End Sub
+
+    Private Function ColocarCartas(pos, Optional force = False, Optional pila = True)
+        Dim destinoCartas = pilas(pos)
+        Dim destinoBotones = botones(pos)
+        Dim posK As Integer = destinoCartas.validarComlumnaKAS(cartasSeleccionadas) 'Valida si ya se completo una columna'
+        Dim visibleOrigen = True
+        Dim visibleDestino = True
+        Dim carta As Carta
+        Dim boton As PictureBox
+        Dim y = destinoCartas.Count
+
+        If (posK <> -1) Then 'Validar si al insertar estoy completando una columna'
+            Dim backupCartas As Pila = destinoCartas.SacarCartas(destinoCartas.obtenerCarta(posK))
+            Dim backupBotones As List(Of PictureBox) = New List(Of PictureBox)
+            Dim backupCartasOrigen As Pila = New Pila()
+            Dim backupBotonesOrigen As List(Of PictureBox) = New List(Of PictureBox)
+            Dim btn As PictureBox
+
+            'Guarda, quita y oculta los botones del destino que ayudan a completar la fila'
+            For i = 0 To (backupCartas.Count) - 1
+                btn = destinoBotones(posK)
+                btn.Visible = False
+                btn.Enabled = False
+                destinoBotones.Remove(btn)
+                backupBotones.Add(btn)
+            Next
+            'Oculta los botones que ayudan a completar la fila en el destino'
+            For i = 0 To botonesSeleccionados.Count - 1
+                botonesSeleccionados(i).Visible = False
+                botonesSeleccionados(i).Enabled = False
+                backupBotonesOrigen.Add(botonesSeleccionados(i))
+                backupCartasOrigen.Insert(cartasSeleccionadas.obtenerCarta(i))
+            Next
+
+            visibleDestino = voltearCarta(pos)
+            visibleOrigen = voltearCarta(indicesAnteriores(0))
+            faltan -= 1
+            If (faltan = 0) Then
+                MessageBox.Show("Felicidades has ganado!")
+                Return False
+            End If
+            sumarPuntos(100)
+            Dim jugada = {4, pos, backupCartas, backupBotones, indicesAnteriores(0), backupCartasOrigen, backupBotonesOrigen, visibleDestino, visibleOrigen}
+            If (pila) Then registro.Push(jugada)
+        ElseIf (indicesAnteriores(0) <> pos) AndAlso destinoCartas.Insert(cartasSeleccionadas) OrElse force AndAlso destinoCartas.InserForce(cartasSeleccionadas) Then
+            Dim activada = voltearCarta(indicesAnteriores(0))
+            Dim i = 0
+            Dim backupCartas = New Pila()
+            Dim backupBotones = New List(Of PictureBox)
+
+            For bt = 0 To botonesSeleccionados.Count - 1
+                backupBotones.Add(botonesSeleccionados(bt))
+                backupCartas.Insert(cartasSeleccionadas.obtenerCarta(i))
+                destinoBotones.Add(botonesSeleccionados(bt))
+                botonesSeleccionados(bt).Location = calcularPosicion(pos, y, True)
+                botonesSeleccionados(bt).BringToFront()
+                botonesSeleccionados(bt).Enabled = True
+                botonesSeleccionados(bt).Visible = True
+                cartasSeleccionadas.obtenerCarta(i).esMobilbe = True
+                cartasSeleccionadas.obtenerCarta(i).esVisible = True
+                y += 1
+                i += 1
+            Next
+            Dim jugada = {3, indicesAnteriores(0), backupCartas, backupBotones, activada, pos}
+            If (pila) Then registro.Push(jugada)
+            restarPuntos()
+        Else
+            Dim origen = pilas(indicesAnteriores(0))
+            y = origen.Count
+            origen.InserForce(cartasSeleccionadas)
+
+            For Each b In botonesSeleccionados
+                botones(indicesAnteriores(0)).Add(b)
+                b.Location = calcularPosicion(indicesAnteriores(0), y)
+                ''  b.ForeColor = Color.Red
+                b.BringToFront()
+                y += 1
+            Next
+
+        End If
+        botonesSeleccionados.Clear()
+        cartasSeleccionadas = New Pila()
+        If (botones(pos).Count > 0) Then
+            indicesAnteriores = ObtenerIndices(botones(pos)(0))
+        Else
+            indicesAnteriores = {pos, 0}
+        End If
+        Return True
+    End Function
+
     Private Sub controlIndicadores(flag)
         btnAnterior.Visible = flag
         btnAnterior.Enabled = flag
@@ -190,13 +313,18 @@ Public Class Tablero
         Return {carta, boton}
     End Function
 
-    Private Sub restarPuntos()
-        puntos -= 1
+    Private Sub restarPuntos(Optional pts = 1)
+        puntos -= pts
         Puntaje.Text = "Puntos: " + puntos.ToString()
         If (puntos <= 0) Then
             MessageBox.Show("Has perdido no te quedan puntos!")
             controlJuego(False)
         End If
+    End Sub
+
+    Private Sub sumarPuntos(Optional pts = 1)
+        puntos += pts
+        Puntaje.Text = "Puntos: " + puntos.ToString()
     End Sub
 
     Private Function obtenerUltimaCarta(pila) As Object()
@@ -340,40 +468,70 @@ Public Class Tablero
                     volver()
                 Next
                 crearBotonRepartir(botonesRepartir.Count)
-
                 restarPuntos()
-            ElseIf (jugada(0) = 3) Then
-                Dim jugadas As List(Of Object) = New List(Of Object)
-                For i = 0 To jugada(1)
-                    jugadas.Insert(0, registro.Pop())
+            ElseIf (jugada(0) = 3) Then ''{tipo,origen,cartas,botones,acitvado,destino}
+                faltan += 1
+                Dim destinoCartas = pilas(jugada(5))
+                Dim destinoBotones = botones(jugada(5))
+                Dim origenCartas = pilas(jugada(1))
+                Dim origenBotones = botones(jugada(1))
+                cartasSeleccionadas = jugada(2)
+                botonesSeleccionados = jugada(3)
+                For i = 0 To cartasSeleccionadas.Count - 1
+                    destinoCartas.Remove(cartasSeleccionadas.obtenerCarta(i))
+                    destinoBotones.Remove(botonesSeleccionados(i))
                 Next
+                If (origenCartas.Count > 0) Then
+                    origenCartas.obtenerCarta(origenCartas.Count - 1).esVisible = jugada(4)
+                    origenCartas.obtenerCarta(origenCartas.Count - 1).esMobilbe = jugada(4)
+                    origenBotones(origenBotones.Count - 1).Enabled = jugada(4)
+                    If (jugada(4)) Then
+                        origenBotones(origenBotones.Count - 1).Image = Image.FromFile(origenCartas.obtenerCarta(origenCartas.Count - 1).imagen)
+                    Else
+                        origenBotones(origenBotones.Count - 1).Image = Image.FromFile(imagenVolteada)
 
-                For Each jugada In jugadas
-                    Dim carta As Carta = jugada(3)
-                    Dim btn As PictureBox = jugada(4)
-
-                    If (Not IsNothing(jugada(5))) Then
-                        Dim cartaAnterior = pilas(jugada(1)).obtenerCarta(pilas(jugada(1)).Count - 1)
-                        Dim botonAnterior = botones(jugada(1))(botones(jugada(1)).Count - 1)
-                        cartaAnterior.esVisible = jugada(5)
-                        botonAnterior.Enabled = jugada(5)
-                        If pilas(jugada(1)).obtenerCarta(pilas(jugada(1)).Count - 1).esVisible Then
-                            botonAnterior.Image = Image.FromFile(cartaAnterior.imagen)
-                        Else
-                            botonAnterior.Image = Image.FromFile(imagenVolteada)
-                            botonAnterior.Enabled = False
-                            carta.esMobilbe = False
-                        End If
-                        botonAnterior.SizeMode = PictureBoxSizeMode.StretchImage
                     End If
-                    pilas(jugada(1)).InserForce(carta)
-                    pilas(jugada(2)).Remove(carta)
-                    botones(jugada(1)).Add(btn)
-                    botones(jugada(2)).Remove(btn)
+                    origenBotones(origenBotones.Count - 1).SizeMode = PictureBoxSizeMode.StretchImage
+                End If
+                origenCartas.InserForce(jugada(2))
+                For Each btn As PictureBox In jugada(3)
+                    btn.Location = calcularPosicion(jugada(1), origenBotones.Count)
                     btn.BringToFront()
-                    btn.Location = calcularPosicion(jugada(1), pilas(jugada(1)).Count - 1)
+                    origenBotones.Add(btn)
                 Next
-                restarPuntos()
+                cartasSeleccionadas = New Pila()
+                botonesSeleccionados = New List(Of PictureBox)
+            ElseIf (jugada(0) = 4) Then ''{4, destino, backupCartas, backupBotones, origen, cartasSeleccionadas, botonesSeleccionados, visibleDestino, visibleOrigen}
+                Dim origen As Pila = pilas(jugada(4))
+                Dim destino As Pila = pilas(jugada(1))
+
+                If (origen.Count > 0) Then origen.obtenerCarta(origen.Count - 1).esVisible = jugada(8)
+                If (destino.Count > 0) Then destino.obtenerCarta(destino.Count - 1).esVisible = jugada(7)
+
+                cartasSeleccionadas = jugada(2)
+                botonesSeleccionados = jugada(3)
+                ColocarCartas(jugada(1), True, False)
+                'Devolviendo las cartas y botones del destino'
+                ''For i = 0 To listaCartas.Count - 1
+                ''destino.Insert(listaCartas.obtenerCarta(i))
+                ''listaBotones(i).Visible = True
+                ''listaBotones(i).Enabled = True
+                ''botones(jugada(1)).Add(listaBotones(i))
+                ''listaBotones(i).Location = calcularPosicion(jugada(1), botones(jugada(1)).Count - 1)
+                ''Next
+
+                cartasSeleccionadas = jugada(5)
+                botonesSeleccionados = jugada(6)
+                ColocarCartas(jugada(4), True, False)
+                'Devolviendo las cartas y botones del origen'
+                ''For i = 0 To listaCartas.Count - 1
+                ''origen.Insert(listaCartas.obtenerCarta(i))
+                ''listaBotones(i).Visible = True
+                ''listaBotones(i).Enabled = True
+                ''listaBotones(i).Location = calcularPosicion(jugada(4), botones(jugada(4)).Count - 1)
+                ''botones(jugada(4)).Add(listaBotones(i))
+                ''Next
+                restarPuntos(99)
             End If
         End If
         Return True
@@ -441,108 +599,8 @@ Public Class Tablero
     Private Sub EndDrag(sender As Object, e As System.Windows.Forms.MouseEventArgs)
         If (botonesSeleccionados.Count > 0) Then
             Dim b As PictureBox = DirectCast(sender, PictureBox)
-            Dim original = DirectCast(sender, PictureBox)
             Dim indicesActuales = ObtenerIndices(b)
-            Dim origen As Pila = pilas(indicesAnteriores(0))
-            Dim destino As Pila = pilas(indicesActuales(0))
-            Dim y As Integer = destino.Count
-            Dim posK As Integer = destino.validarComlumnaKAS(cartasSeleccionadas) 'Valida si ya se completo una columna'
-            Dim rembtn As List(Of PictureBox) = New List(Of PictureBox)
-
-            If (posK <> -1) Then
-                Dim nuevas As Pila = destino.SacarCartas(destino.obtenerCarta(posK))
-                ''Guardar en la pila
-                For i = posK To botones(indicesActuales(0)).Count - 1
-                    rembtn.Add(botones(indicesActuales(0))(i))
-                Next
-                For Each bt In rembtn
-                    bt.Visible = False
-                    bt.Enabled = False
-                    botones(indicesActuales(0)).Remove(bt)
-                Next
-                For Each bt In botonesSeleccionados
-                    bt.Visible = False
-                    bt.Enabled = False
-                Next
-                botonesSeleccionados = New List(Of PictureBox)
-                If (destino.Count > 0) Then
-                    Dim carta = destino.obtenerCarta(destino.Count - 1)
-                    Dim boton = botones(indicesActuales(0))(botones(indicesActuales(0)).Count - 1)
-                    carta.esVisible = True
-                    carta.esMobilbe = True
-                    boton.Enabled = True
-                    boton.Image = Image.FromFile(carta.imagen)
-                    boton.SizeMode = PictureBoxSizeMode.StretchImage
-
-                End If
-                If (origen.Count > 0 AndAlso Not origen.obtenerCarta(origen.Count - 1).esVisible) Then
-                    Dim carta As Carta = origen.obtenerCarta(origen.Count - 1)
-                    Dim boton As PictureBox = botones(indicesAnteriores(0))(botones(indicesAnteriores(0)).Count - 1)
-                    carta.esMobilbe = True
-                    carta.esVisible = True
-                    boton.Image = Image.FromFile(carta.imagen)
-                    boton.SizeMode = PictureBoxSizeMode.StretchImage
-                    boton.Enabled = True
-                End If
-                faltan -= 1
-                If (faltan = 0) Then
-                    MessageBox.Show("Felicidades has ganado!")
-                End If
-                puntos += 100
-            ElseIf (indicesAnteriores(0) <> indicesActuales(0) AndAlso destino.Insert(cartasSeleccionadas)) Then
-                b.Location = calcularPosicion(indicesActuales(0), y)
-                Dim activada = Nothing
-                If (origen.Count > 0 AndAlso Not origen.obtenerCarta(origen.Count - 1).esVisible) Then
-                    Dim carta As Carta = origen.obtenerCarta(origen.Count - 1)
-                    Dim boton As PictureBox = botones(indicesAnteriores(0))(botones(indicesAnteriores(0)).Count - 1)
-                    carta.esMobilbe = True
-                    carta.esVisible = True
-                    boton.Image = Image.FromFile(carta.imagen)
-                    boton.SizeMode = PictureBoxSizeMode.StretchImage
-                    boton.Enabled = True
-                    activada = False
-                Else
-                    activada = True
-                End If
-
-                b.BringToFront()
-                Dim i = 0
-                '' Dim ba As PictureBox = Nothing
-                ''If (indicesAnteriores(1) > 0) Then
-                ''ba = botones(indicesAnteriores(0))(botones(indicesAnteriores(0)).Count - 1)
-                ''End If
-                Dim jugada
-                For Each b In botonesSeleccionados
-                    If (original.Equals(b)) Then
-                        jugada = {1, indicesAnteriores(0), indicesActuales(0), cartasSeleccionadas.getElementos(i), b, activada}
-                    Else
-                        jugada = {1, indicesAnteriores(0), indicesActuales(0), cartasSeleccionadas.getElementos(i), b, Nothing}
-                    End If
-                    i += 1
-                    registro.Push(jugada)
-                    botones(indicesAnteriores(0)).Remove(b)
-                    botones(indicesActuales(0)).Add(b)
-                    b.Location = calcularPosicion(indicesActuales(0), y, True)
-                    b.BringToFront()
-                    y += 1
-                Next
-                jugada = {3, i - 1}
-                registro.Push(jugada)
-                restarPuntos()
-            Else
-                y = origen.Count
-                origen.InserForce(cartasSeleccionadas)
-
-                For Each b In botonesSeleccionados
-                    botones(indicesAnteriores(0)).Add(b)
-                    b.Location = calcularPosicion(indicesAnteriores(0), y)
-                    ''  b.ForeColor = Color.Red
-                    b.BringToFront()
-                    y += 1
-                Next
-            End If
-            botonesSeleccionados.Clear()
-            indicesAnteriores = indicesActuales
+            ColocarCartas(indicesActuales(0))
         Else
 
         End If
