@@ -605,6 +605,7 @@ Public Class Tablero
     Private Sub Tablero_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         Main.Visible = True
         Barajas.reparticiones = Nothing
+        Barajas.NumeroBarajas.Value = 1
     End Sub
 
     Private Sub btnAnterior_Click(sender As Object, e As EventArgs) Handles btnAnterior.Click
