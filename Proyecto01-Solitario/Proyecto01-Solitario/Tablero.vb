@@ -646,7 +646,7 @@ Public Class Tablero
     End Sub
 
     Private Sub nudNumeroTablero_ValueChanged(sender As Object, e As EventArgs) Handles nudNumeroTablero.ValueChanged
-        If (nudNumeroTablero.Value >= Barajas.reparticiones.Count) Then
+        If (nudNumeroTablero.Value > Barajas.reparticiones.Count) Then
             nudNumeroTablero.Value = 1
         End If
         If (nudNumeroTablero.Value < 1) Then
