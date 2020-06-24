@@ -134,6 +134,18 @@ Public Class Tablero
         Return True
     End Function
 
+    Private Sub voltearAbajoCartas(pila, pos)
+        Dim origenCartas = pilas(pila)
+        Dim origenBotones = botones(pila)
+        For i = 0 To pos
+            origenCartas.obtenerCarta(i).esMobilbe = False
+            origenCartas.obtenerCarta(i).esVisible = False
+            origenBotones(i).Enabled = False
+            origenBotones(i).Image = Image.FromFile(imagenVolteada)
+            origenBotones(i).SizeMode = PictureBoxSizeMode.StretchImage
+        Next
+    End Sub
+
     Private Sub AgarrarCartas(posPila As Integer, Optional posFila As Integer = -1)
         Dim origen As Pila = pilas(posPila)
         If (posFila = -1) Then posFila = origen.Count - 1
@@ -438,18 +450,20 @@ Public Class Tablero
             ElseIf (jugada(0) = 1) Then ' {tipo,origen,destino,carta,boton,visible anterior} //Inserccion desde el mazo
                 Dim carta As Carta = jugada(3)
                 Dim btn As PictureBox = jugada(4)
+                Dim origenCartas = pilas(jugada(1))
 
                 If (Not IsNothing(jugada(5))) Then
                     Dim cartaAnterior = pilas(jugada(1)).obtenerCarta(pilas(jugada(1)).Count - 1)
                     Dim botonAnterior = botones(jugada(1))(botones(jugada(1)).Count - 1)
                     cartaAnterior.esVisible = jugada(5)
                     botonAnterior.Enabled = jugada(5)
-                    If pilas(jugada(1)).obtenerCarta(pilas(jugada(1)).Count - 1).esVisible Then
+                    If origenCartas.obtenerCarta(origenCartas.Count - 1).esVisible Then
                         botonAnterior.Image = Image.FromFile(cartaAnterior.imagen)
                     Else
                         botonAnterior.Image = Image.FromFile(imagenVolteada)
                         botonAnterior.Enabled = False
                         carta.esMobilbe = False
+                        voltearAbajoCartas(jugada(1), origenCartas.Count - 1)
                     End If
                     botonAnterior.SizeMode = PictureBoxSizeMode.StretchImage
                 End If
@@ -467,10 +481,9 @@ Public Class Tablero
                 For i = 0 To jugada(1)
                     volver()
                 Next
-                crearBotonRepartir(botonesRepartir.Count)
+                crearBotonRepartir(botonesRepartir.Count - 1)
                 restarPuntos()
             ElseIf (jugada(0) = 3) Then ''{tipo,origen,cartas,botones,acitvado,destino}
-                faltan += 1
                 Dim destinoCartas = pilas(jugada(5))
                 Dim destinoBotones = botones(jugada(5))
                 Dim origenCartas = pilas(jugada(1))
@@ -489,7 +502,7 @@ Public Class Tablero
                         origenBotones(origenBotones.Count - 1).Image = Image.FromFile(origenCartas.obtenerCarta(origenCartas.Count - 1).imagen)
                     Else
                         origenBotones(origenBotones.Count - 1).Image = Image.FromFile(imagenVolteada)
-
+                        voltearAbajoCartas(jugada(1), origenCartas.Count - 1)
                     End If
                     origenBotones(origenBotones.Count - 1).SizeMode = PictureBoxSizeMode.StretchImage
                 End If
@@ -505,32 +518,24 @@ Public Class Tablero
                 Dim origen As Pila = pilas(jugada(4))
                 Dim destino As Pila = pilas(jugada(1))
 
-                If (origen.Count > 0) Then origen.obtenerCarta(origen.Count - 1).esVisible = jugada(8)
-                If (destino.Count > 0) Then destino.obtenerCarta(destino.Count - 1).esVisible = jugada(7)
+                If (origen.Count > 0) Then
+                    origen.obtenerCarta(origen.Count - 1).esVisible = jugada(8)
+                    If Not jugada(8) Then voltearAbajoCartas(jugada(4), origen.Count - 1)
+                End If
+                If (destino.Count > 0) Then
+                    destino.obtenerCarta(destino.Count - 1).esVisible = jugada(7)
+                    If Not jugada(7) Then voltearAbajoCartas(jugada(1), destino.Count - 1)
+                End If
 
                 cartasSeleccionadas = jugada(2)
                 botonesSeleccionados = jugada(3)
                 ColocarCartas(jugada(1), True, False)
-                'Devolviendo las cartas y botones del destino'
-                ''For i = 0 To listaCartas.Count - 1
-                ''destino.Insert(listaCartas.obtenerCarta(i))
-                ''listaBotones(i).Visible = True
-                ''listaBotones(i).Enabled = True
-                ''botones(jugada(1)).Add(listaBotones(i))
-                ''listaBotones(i).Location = calcularPosicion(jugada(1), botones(jugada(1)).Count - 1)
-                ''Next
 
                 cartasSeleccionadas = jugada(5)
                 botonesSeleccionados = jugada(6)
                 ColocarCartas(jugada(4), True, False)
-                'Devolviendo las cartas y botones del origen'
-                ''For i = 0 To listaCartas.Count - 1
-                ''origen.Insert(listaCartas.obtenerCarta(i))
-                ''listaBotones(i).Visible = True
-                ''listaBotones(i).Enabled = True
-                ''listaBotones(i).Location = calcularPosicion(jugada(4), botones(jugada(4)).Count - 1)
-                ''botones(jugada(4)).Add(listaBotones(i))
-                ''Next
+
+                faltan += 1
                 restarPuntos(99)
             End If
         End If
@@ -544,6 +549,9 @@ Public Class Tablero
         Dim b As PictureBox = DirectCast(sender, PictureBox)
         If (Not IsNothing(b)) Then
             indicesAnteriores = ObtenerIndices(b)
+
+            If (Not pilas(indicesAnteriores(0)).obtenerCarta(indicesAnteriores(1)).esMobilbe) Then Return
+
             coordenadas.Y = MousePosition.Y - sender.top
             coordenadas.X = MousePosition.X - sender.left
             Dim origen As Pila = pilas(indicesAnteriores(0))
