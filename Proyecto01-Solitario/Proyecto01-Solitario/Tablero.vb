@@ -26,6 +26,8 @@ Public Class Tablero
     Private OFFSETX As Integer = 130
     Private OFFSETY As Integer = 150
 
+    Private matrizPosibles(10)
+
     Private Sub Tablero_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         panel_contenedor.AllowDrop = True
         Me.WindowState = FormWindowState.Maximized
@@ -44,7 +46,6 @@ Public Class Tablero
         'Hace que se repartan las cartas en funcion del mazo elegido'
         CambiarMazo()
     End Sub
-
 
 
     Private Function copiarListas(ByVal original As List(Of Carta), ByVal copia As List(Of Carta))
@@ -102,6 +103,10 @@ Public Class Tablero
         btn_atras.Enabled = flag
         btn_atras.Visible = flag
         panel_contenedor.Controls.Add(btn_atras)
+
+        btn_ColocarCarta.Enabled = flag
+        btn_ColocarCarta.Visible = flag
+        panel_contenedor.Controls.Add(btn_ColocarCarta)
 
         If (flag) Then panel_contenedor.Controls.Add(Puntaje)
 
@@ -677,4 +682,127 @@ Public Class Tablero
     Private Sub btnAnterior_Click(sender As Object, e As EventArgs) Handles btnAnterior.Click
         nudNumeroTablero.Value -= 1
     End Sub
+
+    Private Sub prepararAutoSolcion()
+        For i = 0 To 9
+            matrizPosibles(i) = {{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}.ToList(),
+                                 {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}.ToList()}
+        Next
+    End Sub
+
+    Private Sub obtenerCartaMobible(cartas As Integer)
+        Dim pila As Pila = pilas(cartas)
+        Dim pos = pila.Count - 1
+        If (pos >= 0) Then
+            Dim carta = pila.obtenerCarta(pos)
+            Dim cartaAnt = pila.obtenerCarta(pos)
+            cartasSeleccionadas.getElementos().Insert(0, carta)
+            cartasSeleccionadas.getCartaMayor = carta
+            cartasSeleccionadas.getCartaMenor = carta
+            pila.Remove(carta)
+            botonesSeleccionados.Insert(0, botones(cartas)(pos))
+            botones(cartas).Remove(botones(cartas)(pos))
+            indicesAnteriores = {cartas, pos}
+            For i = 1 To pos
+                cartaAnt = carta
+                carta = pila.obtenerCarta(pos - i)
+                If (carta.esVisible AndAlso carta.numero - cartaAnt.numero = 1 AndAlso carta.familia.Nombre.Equals(cartaAnt.familia.Nombre)) Then
+                    cartasSeleccionadas.getElementos().Insert(0, carta)
+                    cartasSeleccionadas.getCartaMayor = carta
+                    pila.Remove(carta)
+                    botonesSeleccionados.Insert(0, botones(cartas)(pos - i))
+                    botones(cartas).Remove(botones(cartas)(pos - i))
+                    indicesAnteriores = {cartas, pos - i}
+                Else
+                    Exit For
+                End If
+            Next
+        End If
+    End Sub
+    Private Function autoColocarCarta(cartas As Integer, ByRef posiciones As List(Of Integer))
+        Dim destino = pilas(cartas)
+        Dim posible = -1
+        If (destino.Count > 0 Or posiciones.Count <= 0) Then
+            'Obtener la lista de cartas que vamos a mover'
+            obtenerCartaMobible(cartas)
+            For i = 0 To posiciones.Count - 1
+                destino = pilas(posiciones(i))
+                'Verficar en todas las pociciones si hay una carta menor que ella'
+                If ((Not cartasSeleccionadas.esVacia AndAlso Not destino.esVacia) AndAlso
+                     destino.getCartaMenor.esVisible AndAlso
+                     destino.getCartaMenor.numero - cartasSeleccionadas.getCartaMayor.numero = 1) Then
+                    'si la hay pregunta si son de la misma familia'
+                    If (destino.getCartaMenor.familia.Nombre.Equals(cartasSeleccionadas.getCartaMayor.familia.Nombre)) Then
+                        ColocarCartas(posiciones(i))
+                        posiciones.RemoveAt(i)
+                        cartasSeleccionadas = New Pila()
+                        botonesSeleccionados.Clear()
+                        Return True
+                        'si no lo son busca hasta encontrar una de la misma familia'
+                    Else
+                        posible = posiciones(i)
+                    End If
+                End If
+            Next
+            'si no la encuentra la inserta en la que habia encontrado anteriormente'
+            If (posible > 0) Then
+                ColocarCartas(posible)
+                posiciones.Remove(posible)
+                cartasSeleccionadas = New Pila()
+                botonesSeleccionados.Clear()
+                Return False
+            End If
+        End If
+        pilas(cartas).InserForce(cartasSeleccionadas)
+        For Each btn In botonesSeleccionados
+            botones(cartas).Add(btn)
+        Next
+        cartasSeleccionadas = New Pila()
+        botonesSeleccionados.Clear()
+        Return False
+    End Function
+
+    Private Sub btn_ColocarCarta_Click(sender As Object, e As EventArgs) Handles btn_ColocarCarta.Click
+        'Mientras no haya terminado'
+        ''
+        Return
+        Dim llamadas As Stack = New Stack()
+        Dim llamada
+        Dim noPosibles = 0
+        Dim pos = 0
+        Dim candidatos As List(Of Integer) = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}.ToList()
+        While noPosibles <= 10
+            If (pos > 9) Then
+                pos = 0
+            End If
+            llamada = {pos, noPosibles, candidatos}
+            If (autoColocarCarta(pos, candidatos)) Then
+                noPosibles = 0
+            Else
+
+                noPosibles += 1
+            End If
+            pos += 1
+        End While
+    End Sub
+
+    Private Function AutoSolucionar(pos As Integer, candidatos As List(Of Integer))
+        'Si la pos es > que 9'
+        Dim intentos = 0
+        If (pos > candidatos.Count - 1) Then Return AutoSolucionar(0, candidatos)
+        'pos = 0'
+        While (Not autoColocarCarta(pos, candidatos) And intentos < 15)
+            intentos += 1
+        End While
+        If (intentos < 15) Then
+
+        End If
+
+        'Si se puede insertar alguna carta'
+        'Se inserta la carta y se llama a la siguiente carta'
+        'Si no se puede insertar se pide una nueva reparticion'
+        'Se reparten cartas y se llama a solucionar otra vez desde cero'
+        'si no ha ganado return false'
+        'si gano retrun true'
+    End Function
 End Class

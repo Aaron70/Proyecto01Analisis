@@ -10,8 +10,8 @@ Public Class Barajas
         reparticiones = New List(Of Pila)
         Dim cant = NumeroBarajas.Value
         For i = 1 To cant
-            Dim Mazo1 As Mazo = New Mazo(1)
-            Dim Mazo2 As Mazo = New Mazo(1)
+            Dim Mazo1 As Mazo = New Mazo(2)
+            Dim Mazo2 As Mazo = New Mazo(2)
 
             Mazo1.barajarCartas()
             Mazo2.barajarCartas()

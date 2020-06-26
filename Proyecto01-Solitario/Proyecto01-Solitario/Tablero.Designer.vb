@@ -23,15 +23,16 @@ Partial Class Tablero
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.panel_contenedor = New System.Windows.Forms.Panel()
+        Me.Puntaje = New System.Windows.Forms.Label()
+        Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.btnSiguiente = New System.Windows.Forms.Button()
         Me.btnJugar = New System.Windows.Forms.Button()
         Me.btnAnterior = New System.Windows.Forms.Button()
         Me.lbNumeroTablero = New System.Windows.Forms.Label()
         Me.nudNumeroTablero = New System.Windows.Forms.NumericUpDown()
         Me.btn_atras = New System.Windows.Forms.Button()
-        Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
-        Me.Puntaje = New System.Windows.Forms.Label()
+        Me.btn_ColocarCarta = New System.Windows.Forms.Button()
         Me.panel_contenedor.SuspendLayout()
         CType(Me.nudNumeroTablero, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -43,6 +44,7 @@ Partial Class Tablero
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.panel_contenedor.BackColor = System.Drawing.SystemColors.ControlDark
+        Me.panel_contenedor.Controls.Add(Me.btn_ColocarCarta)
         Me.panel_contenedor.Controls.Add(Me.Puntaje)
         Me.panel_contenedor.Controls.Add(Me.Label2)
         Me.panel_contenedor.Controls.Add(Me.Label1)
@@ -56,6 +58,34 @@ Partial Class Tablero
         Me.panel_contenedor.Name = "panel_contenedor"
         Me.panel_contenedor.Size = New System.Drawing.Size(1336, 701)
         Me.panel_contenedor.TabIndex = 0
+        '
+        'Puntaje
+        '
+        Me.Puntaje.AutoSize = True
+        Me.Puntaje.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Puntaje.Location = New System.Drawing.Point(284, 13)
+        Me.Puntaje.Name = "Puntaje"
+        Me.Puntaje.Size = New System.Drawing.Size(108, 24)
+        Me.Puntaje.TabIndex = 9
+        Me.Puntaje.Text = "Puntos: 500"
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Location = New System.Drawing.Point(254, 591)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(73, 17)
+        Me.Label2.TabIndex = 8
+        Me.Label2.Text = "Undefined"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(185, 591)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(73, 17)
+        Me.Label1.TabIndex = 7
+        Me.Label1.Text = "Undefined"
         '
         'btnSiguiente
         '
@@ -111,33 +141,14 @@ Partial Class Tablero
         Me.btn_atras.Text = "Atras"
         Me.btn_atras.UseVisualStyleBackColor = True
         '
-        'Label1
+        'btn_ColocarCarta
         '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(185, 591)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(73, 17)
-        Me.Label1.TabIndex = 7
-        Me.Label1.Text = "Undefined"
-        '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(254, 591)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(73, 17)
-        Me.Label2.TabIndex = 8
-        Me.Label2.Text = "Undefined"
-        '
-        'Puntaje
-        '
-        Me.Puntaje.AutoSize = True
-        Me.Puntaje.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Puntaje.Location = New System.Drawing.Point(284, 13)
-        Me.Puntaje.Name = "Puntaje"
-        Me.Puntaje.Size = New System.Drawing.Size(108, 24)
-        Me.Puntaje.TabIndex = 9
-        Me.Puntaje.Text = "Puntos: 500"
+        Me.btn_ColocarCarta.Location = New System.Drawing.Point(430, 13)
+        Me.btn_ColocarCarta.Name = "btn_ColocarCarta"
+        Me.btn_ColocarCarta.Size = New System.Drawing.Size(125, 41)
+        Me.btn_ColocarCarta.TabIndex = 10
+        Me.btn_ColocarCarta.Text = "Colocar Carta"
+        Me.btn_ColocarCarta.UseVisualStyleBackColor = True
         '
         'Tablero
         '
@@ -164,4 +175,5 @@ Partial Class Tablero
     Friend WithEvents Label2 As Label
     Friend WithEvents Label1 As Label
     Friend WithEvents Puntaje As Label
+    Friend WithEvents btn_ColocarCarta As Button
 End Class

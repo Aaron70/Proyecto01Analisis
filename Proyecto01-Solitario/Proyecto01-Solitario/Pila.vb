@@ -43,6 +43,24 @@ Public Class Pila
             elementos = value
         End Set
     End Property
+
+    Public Property getCartaMenor As Carta
+        Get
+            Return cartaMenor
+        End Get
+        Set(value As Carta)
+            cartaMenor = value
+        End Set
+    End Property
+
+    Public Property getCartaMayor As Carta
+        Get
+            Return cartaMayor
+        End Get
+        Set(value As Carta)
+            cartaMayor = value
+        End Set
+    End Property
     'En una totalmente llena el K seria el numero mayor y habria sido el primero en entrar y el As '
     Sub New()
         cartaMenor = Nothing
