@@ -23,8 +23,8 @@ Public Class Tablero
     Private LARGOCARTAS As Integer = 145
     Private PORCENTAJELARGOVISIBLE As Decimal = 0.17
     Private PORCENTAJELARGONOVISIBLE As Decimal = 0.15
-    Private OFFSETX As Integer = 130
-    Private OFFSETY As Integer = 150
+    Private OFFSETX As Integer = 70
+    Private OFFSETY As Integer = 160
 
     Private Sub Tablero_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         panel_contenedor.AllowDrop = True
@@ -664,6 +664,7 @@ Public Class Tablero
         Main.Visible = True
         Barajas.reparticiones = Nothing
         Barajas.NumeroBarajas.Value = 1
+        Barajas.RBunaFamilia.Checked = True
     End Sub
 
     Private Sub btnAnterior_Click(sender As Object, e As EventArgs) Handles btnAnterior.Click

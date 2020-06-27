@@ -6,7 +6,7 @@ Public Class Barajas
 
     Private random As Random
 
-    Private Sub CrearBarajas_Click(sender As Object, e As EventArgs) Handles CrearBarajas.Click
+    Private Sub CrearBarajas_Click(sender As Object, e As EventArgs)
         reparticiones = New List(Of Pila)
         Dim cant = NumeroBarajas.Value
         For i = 1 To cant
@@ -47,5 +47,29 @@ Public Class Barajas
 
     Private Sub Barajas_Closing(sender As Object, e As CancelEventArgs) Handles Me.Closing
         Main.Visible = True
+    End Sub
+
+    Private Sub PictureBox2_Click(sender As Object, e As EventArgs) Handles PictureBox2.Click
+        reparticiones = New List(Of Pila)
+        Dim cant = NumeroBarajas.Value
+        Dim cantFamilias = 1
+        For i = 1 To cant
+            If RBdosFamilias.Checked Then
+                cantFamilias = 2
+            ElseIf RBcuatroFamilias.Checked Then
+                cantFamilias = 4
+            End If
+            Dim Mazo1 As Mazo = New Mazo(cantFamilias)
+            Dim Mazo2 As Mazo = New Mazo(cantFamilias)
+
+            Mazo1.barajarCartas()
+            Mazo2.barajarCartas()
+
+            UnirMazos(Mazo1, Mazo2)
+        Next
+
+
+        Tablero.Show()
+        Me.Hide()
     End Sub
 End Class
