@@ -23,6 +23,7 @@ Partial Class Tablero
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.panel_contenedor = New System.Windows.Forms.Panel()
+        Me.btn_ColocarCarta = New System.Windows.Forms.Button()
         Me.Puntaje = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -32,7 +33,7 @@ Partial Class Tablero
         Me.lbNumeroTablero = New System.Windows.Forms.Label()
         Me.nudNumeroTablero = New System.Windows.Forms.NumericUpDown()
         Me.btn_atras = New System.Windows.Forms.Button()
-        Me.btn_ColocarCarta = New System.Windows.Forms.Button()
+        Me.BackTracking = New System.Windows.Forms.Button()
         Me.panel_contenedor.SuspendLayout()
         CType(Me.nudNumeroTablero, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -44,6 +45,7 @@ Partial Class Tablero
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.panel_contenedor.BackColor = System.Drawing.SystemColors.ControlDark
+        Me.panel_contenedor.Controls.Add(Me.BackTracking)
         Me.panel_contenedor.Controls.Add(Me.btn_ColocarCarta)
         Me.panel_contenedor.Controls.Add(Me.Puntaje)
         Me.panel_contenedor.Controls.Add(Me.Label2)
@@ -58,6 +60,15 @@ Partial Class Tablero
         Me.panel_contenedor.Name = "panel_contenedor"
         Me.panel_contenedor.Size = New System.Drawing.Size(1336, 701)
         Me.panel_contenedor.TabIndex = 0
+        '
+        'btn_ColocarCarta
+        '
+        Me.btn_ColocarCarta.Location = New System.Drawing.Point(430, 13)
+        Me.btn_ColocarCarta.Name = "btn_ColocarCarta"
+        Me.btn_ColocarCarta.Size = New System.Drawing.Size(125, 41)
+        Me.btn_ColocarCarta.TabIndex = 10
+        Me.btn_ColocarCarta.Text = "Colocar Carta"
+        Me.btn_ColocarCarta.UseVisualStyleBackColor = True
         '
         'Puntaje
         '
@@ -141,14 +152,14 @@ Partial Class Tablero
         Me.btn_atras.Text = "Atras"
         Me.btn_atras.UseVisualStyleBackColor = True
         '
-        'btn_ColocarCarta
+        'BackTracking
         '
-        Me.btn_ColocarCarta.Location = New System.Drawing.Point(430, 13)
-        Me.btn_ColocarCarta.Name = "btn_ColocarCarta"
-        Me.btn_ColocarCarta.Size = New System.Drawing.Size(125, 41)
-        Me.btn_ColocarCarta.TabIndex = 10
-        Me.btn_ColocarCarta.Text = "Colocar Carta"
-        Me.btn_ColocarCarta.UseVisualStyleBackColor = True
+        Me.BackTracking.Location = New System.Drawing.Point(575, 12)
+        Me.BackTracking.Name = "BackTracking"
+        Me.BackTracking.Size = New System.Drawing.Size(119, 42)
+        Me.BackTracking.TabIndex = 11
+        Me.BackTracking.Text = "BackTrack"
+        Me.BackTracking.UseVisualStyleBackColor = True
         '
         'Tablero
         '
@@ -176,4 +187,5 @@ Partial Class Tablero
     Friend WithEvents Label1 As Label
     Friend WithEvents Puntaje As Label
     Friend WithEvents btn_ColocarCarta As Button
+    Friend WithEvents BackTracking As Button
 End Class

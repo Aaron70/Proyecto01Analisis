@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.IO
+Imports System.Threading
 
 Public Class Tablero
     Private pilas(9) As Pila
@@ -10,7 +11,8 @@ Public Class Tablero
     Private mazo As Pila
     Private mazoSeleccionado As Integer = 1
     Private mazoAnt As Integer = 0
-    Private registro As Stack
+    Private registro As New Stack
+    Private llamadas As New Stack
     Private random As Random
     Private coordenadas As Point
     Private imagenVolteada As String = Path.Combine(Environment.CurrentDirectory, "..\..\Cartas\volteada.jpg")
@@ -26,7 +28,7 @@ Public Class Tablero
     Private OFFSETX As Integer = 130
     Private OFFSETY As Integer = 150
 
-    Private matrizPosibles(10)
+    Private matrizPosibles(10) As List(Of Integer)
 
     Private Sub Tablero_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         panel_contenedor.AllowDrop = True
@@ -108,6 +110,10 @@ Public Class Tablero
         btn_ColocarCarta.Visible = flag
         panel_contenedor.Controls.Add(btn_ColocarCarta)
 
+        BackTracking.Enabled = flag
+        BackTracking.Visible = flag
+        panel_contenedor.Controls.Add(BackTracking)
+
         If (flag) Then panel_contenedor.Controls.Add(Puntaje)
 
         For i = 0 To botones.Length - 1
@@ -119,7 +125,7 @@ Public Class Tablero
         For i = 0 To botonesRepartir.Count - 1
             botonesRepartir(i).Enabled = flag
         Next
-
+        prepararAutoSolcion()
     End Sub
 
     Private Function voltearCarta(pos)
@@ -625,6 +631,10 @@ Public Class Tablero
 
     Private Sub btn_Repartir_Click(sender As Object, e As EventArgs)
         Dim b As PictureBox = DirectCast(sender, PictureBox)
+        Repartir(b)
+    End Sub
+
+    Private Sub Repartir(b As PictureBox)
         b.Dispose()
         botonesRepartir.Remove(b)
         panel_contenedor.Controls.Remove(b)
@@ -638,6 +648,9 @@ Public Class Tablero
             End If
         Next
         Dim jugada() = {2, pilas.Length - 1}
+        Dim llamada() = {1, matrizPosibles}
+        llamadas.Push(llamada)
+        prepararAutoSolcion()
         registro.Push(jugada)
         restarPuntos()
     End Sub
@@ -685,8 +698,7 @@ Public Class Tablero
 
     Private Sub prepararAutoSolcion()
         For i = 0 To 9
-            matrizPosibles(i) = {{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}.ToList(),
-                                 {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}.ToList()}
+            matrizPosibles(i) = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}.ToList()
         Next
     End Sub
 
@@ -719,43 +731,69 @@ Public Class Tablero
             Next
         End If
     End Sub
-    Private Function autoColocarCarta(cartas As Integer, ByRef posiciones As List(Of Integer))
-        Dim destino = pilas(cartas)
-        Dim posible = -1
-        If (destino.Count > 0 Or posiciones.Count <= 0) Then
-            'Obtener la lista de cartas que vamos a mover'
-            obtenerCartaMobible(cartas)
-            For i = 0 To posiciones.Count - 1
-                destino = pilas(posiciones(i))
-                'Verficar en todas las pociciones si hay una carta menor que ella'
-                If ((Not cartasSeleccionadas.esVacia AndAlso Not destino.esVacia) AndAlso
-                     destino.getCartaMenor.esVisible AndAlso
-                     destino.getCartaMenor.numero - cartasSeleccionadas.getCartaMayor.numero = 1) Then
-                    'si la hay pregunta si son de la misma familia'
-                    If (destino.getCartaMenor.familia.Nombre.Equals(cartasSeleccionadas.getCartaMayor.familia.Nombre)) Then
-                        ColocarCartas(posiciones(i))
-                        posiciones.RemoveAt(i)
-                        cartasSeleccionadas = New Pila()
-                        botonesSeleccionados.Clear()
+    Private Function autoColocarCarta(pos As Integer)
+        Dim destino = pilas(pos)
+        Dim cartas As Pila
+        Dim carta As Carta
+        Dim cartaAnterior As Carta
+        Dim mismaFamilia As Boolean = False
+        Dim posiciones As List(Of Integer) = matrizPosibles(pos)
+        Dim posible As Integer = -1
+        Dim nuevasPos = posiciones.ToArray().ToList()
+        If (destino.Count > 0) Then
+            obtenerCartaMobible(pos)
+            carta = destino.obtenerCarta(destino.Count - 1)
+            cartaAnterior = cartasSeleccionadas.getCartaMayor
+
+            If (Not IsNothing(cartaAnterior) AndAlso Not IsNothing(carta) AndAlso
+                cartaAnterior.esVisible AndAlso carta.esVisible AndAlso
+                carta.numero - cartaAnterior.numero = 1) Then mismaFamilia = True
+
+            For Each posicion In nuevasPos
+                destino = pilas(posicion)
+                carta = destino.getCartaMenor
+                cartaAnterior = cartasSeleccionadas.getCartaMayor
+                'Posible bug carta puede ser null pero enteoria se valida con es vacia'
+                If (Not destino.esVacia AndAlso carta.numero - cartaAnterior.numero = 1 AndAlso posiciones.Contains(posicion)) Then
+                    If (carta.familia.Nombre.Equals(cartaAnterior.familia.Nombre)) Then
+                        ColocarCartas(posicion)
+                        matrizPosibles(pos).Remove(posicion)
+                        llamadas.Push({1, matrizPosibles.ToArray()})
+                        matrizPosibles(pos) = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}.ToList()
+                        matrizPosibles(pos).Remove(pos)
+
+                        For i = 0 To 9
+                            matrizPosibles(i).Add(pos)
+                        Next
                         Return True
-                        'si no lo son busca hasta encontrar una de la misma familia'
-                    Else
-                        posible = posiciones(i)
+
+                    ElseIf (Not mismaFamilia) Then
+                        posible = posicion
                     End If
+                Else
+                    posiciones.Remove(posicion)
                 End If
             Next
-            'si no la encuentra la inserta en la que habia encontrado anteriormente'
-            If (posible > 0) Then
+            If (posible <> -1) Then
                 ColocarCartas(posible)
                 posiciones.Remove(posible)
-                cartasSeleccionadas = New Pila()
-                botonesSeleccionados.Clear()
+                matrizPosibles(pos) = posiciones
+                llamadas.Push({1, matrizPosibles.ToArray()})
+                matrizPosibles(pos) = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}.ToList()
+                matrizPosibles(pos).Remove(pos)
+
+                For i = 0 To 9
+                    If (pos <> i) Then
+                        ''matrizPosibles(i)(0).Remove(posible)
+                        matrizPosibles(i).Add(pos)
+                    End If
+                Next
                 Return False
             End If
         End If
-        pilas(cartas).InserForce(cartasSeleccionadas)
+        pilas(pos).InserForce(cartasSeleccionadas)
         For Each btn In botonesSeleccionados
-            botones(cartas).Add(btn)
+            botones(pos).Add(btn)
         Next
         cartasSeleccionadas = New Pila()
         botonesSeleccionados.Clear()
@@ -763,46 +801,62 @@ Public Class Tablero
     End Function
 
     Private Sub btn_ColocarCarta_Click(sender As Object, e As EventArgs) Handles btn_ColocarCarta.Click
-        'Mientras no haya terminado'
-        ''
-        Return
-        Dim llamadas As Stack = New Stack()
-        Dim llamada
-        Dim noPosibles = 0
-        Dim pos = 0
-        Dim candidatos As List(Of Integer) = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}.ToList()
-        While noPosibles <= 10
-            If (pos > 9) Then
-                pos = 0
-            End If
-            llamada = {pos, noPosibles, candidatos}
-            If (autoColocarCarta(pos, candidatos)) Then
-                noPosibles = 0
-            Else
-
-                noPosibles += 1
-            End If
-            pos += 1
-        End While
+        llamarAuto()
     End Sub
 
-    Private Function AutoSolucionar(pos As Integer, candidatos As List(Of Integer))
-        'Si la pos es > que 9'
+    Private Sub llamarAuto()
+        AutoSolucionar()
+    End Sub
+
+    Private Function AutoSolucionar(Optional back = False)
         Dim intentos = 0
-        If (pos > candidatos.Count - 1) Then Return AutoSolucionar(0, candidatos)
-        'pos = 0'
-        While (Not autoColocarCarta(pos, candidatos) And intentos < 15)
-            intentos += 1
+        Dim inserto = False
+
+        While intentos < 2
+            inserto = False
+            For i = 0 To 9
+                If (autoColocarCarta(i)) Then
+                    inserto = True
+                End If
+            Next
+            If (Not inserto) Then
+                intentos += 1
+            End If
         End While
-        If (intentos < 15) Then
 
+        If (faltan = 0) Then
+            Return True
+        ElseIf (puntos <= 0) Then
+            Return False
+        ElseIf ((botonesRepartir.Count > 0 And Not back) OrElse (botonesRepartir.Count > 0 And (back And inserto))) Then
+            Repartir(botonesRepartir(botonesRepartir.Count - 1))
+            Return AutoSolucionar()
+        Else
+            Backtrack()
+            Return AutoSolucionar(True)
         End If
-
-        'Si se puede insertar alguna carta'
-        'Se inserta la carta y se llama a la siguiente carta'
-        'Si no se puede insertar se pide una nueva reparticion'
-        'Se reparten cartas y se llama a solucionar otra vez desde cero'
-        'si no ha ganado return false'
-        'si gano retrun true'
+        Return False
     End Function
+
+    Private Sub Backtrack()
+        If (registro.Count > 0 And llamadas.Count > 0) Then
+            volver()
+            Dim llamada = llamadas.Pop ''{tipo,orige,origen posiciones, destino,destino posiciones}
+            If (llamada(0) = 0) Then
+                matrizPosibles(llamada(1))(0) = llamada(2)
+                matrizPosibles(llamada(3))(0) = llamada(4)
+            ElseIf llamada(0) = 1 Then
+                For i = 0 To 9
+                    matrizPosibles(i) = DirectCast(llamada(1)(i), List(Of Integer)).ToList()
+                Next
+            End If
+        End If
+    End Sub
+
+    Private Sub BackTracking_Click(sender As Object, e As EventArgs) Handles BackTracking.Click
+        If (registro.Count > 0 And llamadas.Count > 0) Then
+            Backtrack()
+        End If
+    End Sub
+
 End Class
