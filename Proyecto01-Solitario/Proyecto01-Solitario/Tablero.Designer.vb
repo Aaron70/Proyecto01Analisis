@@ -23,6 +23,7 @@ Partial Class Tablero
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.panel_contenedor = New System.Windows.Forms.Panel()
+        Me.btn_ColocarCarta = New System.Windows.Forms.Button()
         Me.Puntaje = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
@@ -32,6 +33,7 @@ Partial Class Tablero
         Me.lbNumeroTablero = New System.Windows.Forms.Label()
         Me.nudNumeroTablero = New System.Windows.Forms.NumericUpDown()
         Me.btn_atras = New System.Windows.Forms.Button()
+        Me.BackTracking = New System.Windows.Forms.Button()
         Me.panel_contenedor.SuspendLayout()
         CType(Me.nudNumeroTablero, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -43,6 +45,9 @@ Partial Class Tablero
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.panel_contenedor.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
+        Me.panel_contenedor.BackColor = System.Drawing.SystemColors.ControlDark
+        Me.panel_contenedor.Controls.Add(Me.BackTracking)
+        Me.panel_contenedor.Controls.Add(Me.btn_ColocarCarta)
         Me.panel_contenedor.Controls.Add(Me.Puntaje)
         Me.panel_contenedor.Controls.Add(Me.Label2)
         Me.panel_contenedor.Controls.Add(Me.Label1)
@@ -58,6 +63,15 @@ Partial Class Tablero
         Me.panel_contenedor.Size = New System.Drawing.Size(1002, 570)
         Me.panel_contenedor.TabIndex = 0
         '
+        'btn_ColocarCarta
+        '
+        Me.btn_ColocarCarta.Location = New System.Drawing.Point(430, 13)
+        Me.btn_ColocarCarta.Name = "btn_ColocarCarta"
+        Me.btn_ColocarCarta.Size = New System.Drawing.Size(125, 41)
+        Me.btn_ColocarCarta.TabIndex = 10
+        Me.btn_ColocarCarta.Text = "Colocar Carta"
+        Me.btn_ColocarCarta.UseVisualStyleBackColor = True
+        '
         'Puntaje
         '
         Me.Puntaje.AutoSize = True
@@ -66,6 +80,9 @@ Partial Class Tablero
         Me.Puntaje.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Puntaje.Name = "Puntaje"
         Me.Puntaje.Size = New System.Drawing.Size(87, 18)
+        Me.Puntaje.Location = New System.Drawing.Point(284, 13)
+        Me.Puntaje.Name = "Puntaje"
+        Me.Puntaje.Size = New System.Drawing.Size(108, 24)
         Me.Puntaje.TabIndex = 9
         Me.Puntaje.Text = "Puntos: 500"
         '
@@ -76,6 +93,9 @@ Partial Class Tablero
         Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(56, 13)
+        Me.Label2.Location = New System.Drawing.Point(254, 591)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(73, 17)
         Me.Label2.TabIndex = 8
         Me.Label2.Text = "Undefined"
         '
@@ -86,6 +106,9 @@ Partial Class Tablero
         Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(56, 13)
+        Me.Label1.Location = New System.Drawing.Point(185, 591)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(73, 17)
         Me.Label1.TabIndex = 7
         Me.Label1.Text = "Undefined"
         '
@@ -149,6 +172,15 @@ Partial Class Tablero
         Me.btn_atras.Text = "Atras"
         Me.btn_atras.UseVisualStyleBackColor = True
         '
+        'BackTracking
+        '
+        Me.BackTracking.Location = New System.Drawing.Point(575, 12)
+        Me.BackTracking.Name = "BackTracking"
+        Me.BackTracking.Size = New System.Drawing.Size(119, 42)
+        Me.BackTracking.TabIndex = 11
+        Me.BackTracking.Text = "BackTrack"
+        Me.BackTracking.UseVisualStyleBackColor = True
+        '
         'Tablero
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -175,4 +207,6 @@ Partial Class Tablero
     Friend WithEvents Label2 As Label
     Friend WithEvents Label1 As Label
     Friend WithEvents Puntaje As Label
+    Friend WithEvents btn_ColocarCarta As Button
+    Friend WithEvents BackTracking As Button
 End Class

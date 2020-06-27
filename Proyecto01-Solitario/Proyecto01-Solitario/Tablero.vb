@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.IO
+Imports System.Threading
 
 Public Class Tablero
     Private pilas(9) As Pila
@@ -10,7 +11,8 @@ Public Class Tablero
     Private mazo As Pila
     Private mazoSeleccionado As Integer = 1
     Private mazoAnt As Integer = 0
-    Private registro As Stack
+    Private registro As New Stack
+    Private llamadas As New Stack
     Private random As Random
     Private coordenadas As Point
     Private imagenVolteada As String = Path.Combine(Environment.CurrentDirectory, "..\..\Cartas\volteada.jpg")
@@ -25,6 +27,8 @@ Public Class Tablero
     Private PORCENTAJELARGONOVISIBLE As Decimal = 0.15
     Private OFFSETX As Integer = 70
     Private OFFSETY As Integer = 160
+
+    Private matrizPosibles(10) As List(Of Integer)
 
     Private Sub Tablero_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         panel_contenedor.AllowDrop = True
@@ -44,7 +48,6 @@ Public Class Tablero
         'Hace que se repartan las cartas en funcion del mazo elegido'
         CambiarMazo()
     End Sub
-
 
 
     Private Function copiarListas(ByVal original As List(Of Carta), ByVal copia As List(Of Carta))
@@ -103,6 +106,14 @@ Public Class Tablero
         btn_atras.Visible = flag
         panel_contenedor.Controls.Add(btn_atras)
 
+        btn_ColocarCarta.Enabled = flag
+        btn_ColocarCarta.Visible = flag
+        panel_contenedor.Controls.Add(btn_ColocarCarta)
+
+        BackTracking.Enabled = flag
+        BackTracking.Visible = flag
+        panel_contenedor.Controls.Add(BackTracking)
+
         If (flag) Then panel_contenedor.Controls.Add(Puntaje)
 
         For i = 0 To botones.Length - 1
@@ -114,7 +125,7 @@ Public Class Tablero
         For i = 0 To botonesRepartir.Count - 1
             botonesRepartir(i).Enabled = flag
         Next
-
+        prepararAutoSolcion()
     End Sub
 
     Private Function voltearCarta(pos)
@@ -133,6 +144,18 @@ Public Class Tablero
 
         Return True
     End Function
+
+    Private Sub voltearAbajoCartas(pila, pos)
+        Dim origenCartas = pilas(pila)
+        Dim origenBotones = botones(pila)
+        For i = 0 To pos
+            origenCartas.obtenerCarta(i).esMobilbe = False
+            origenCartas.obtenerCarta(i).esVisible = False
+            origenBotones(i).Enabled = False
+            origenBotones(i).Image = Image.FromFile(imagenVolteada)
+            origenBotones(i).SizeMode = PictureBoxSizeMode.StretchImage
+        Next
+    End Sub
 
     Private Sub AgarrarCartas(posPila As Integer, Optional posFila As Integer = -1)
         Dim origen As Pila = pilas(posPila)
@@ -438,18 +461,20 @@ Public Class Tablero
             ElseIf (jugada(0) = 1) Then ' {tipo,origen,destino,carta,boton,visible anterior} //Inserccion desde el mazo
                 Dim carta As Carta = jugada(3)
                 Dim btn As PictureBox = jugada(4)
+                Dim origenCartas = pilas(jugada(1))
 
                 If (Not IsNothing(jugada(5))) Then
                     Dim cartaAnterior = pilas(jugada(1)).obtenerCarta(pilas(jugada(1)).Count - 1)
                     Dim botonAnterior = botones(jugada(1))(botones(jugada(1)).Count - 1)
                     cartaAnterior.esVisible = jugada(5)
                     botonAnterior.Enabled = jugada(5)
-                    If pilas(jugada(1)).obtenerCarta(pilas(jugada(1)).Count - 1).esVisible Then
+                    If origenCartas.obtenerCarta(origenCartas.Count - 1).esVisible Then
                         botonAnterior.Image = Image.FromFile(cartaAnterior.imagen)
                     Else
                         botonAnterior.Image = Image.FromFile(imagenVolteada)
                         botonAnterior.Enabled = False
                         carta.esMobilbe = False
+                        voltearAbajoCartas(jugada(1), origenCartas.Count - 1)
                     End If
                     botonAnterior.SizeMode = PictureBoxSizeMode.StretchImage
                 End If
@@ -467,10 +492,9 @@ Public Class Tablero
                 For i = 0 To jugada(1)
                     volver()
                 Next
-                crearBotonRepartir(botonesRepartir.Count)
+                crearBotonRepartir(botonesRepartir.Count - 1)
                 restarPuntos()
             ElseIf (jugada(0) = 3) Then ''{tipo,origen,cartas,botones,acitvado,destino}
-                faltan += 1
                 Dim destinoCartas = pilas(jugada(5))
                 Dim destinoBotones = botones(jugada(5))
                 Dim origenCartas = pilas(jugada(1))
@@ -489,7 +513,7 @@ Public Class Tablero
                         origenBotones(origenBotones.Count - 1).Image = Image.FromFile(origenCartas.obtenerCarta(origenCartas.Count - 1).imagen)
                     Else
                         origenBotones(origenBotones.Count - 1).Image = Image.FromFile(imagenVolteada)
-
+                        voltearAbajoCartas(jugada(1), origenCartas.Count - 1)
                     End If
                     origenBotones(origenBotones.Count - 1).SizeMode = PictureBoxSizeMode.StretchImage
                 End If
@@ -505,32 +529,24 @@ Public Class Tablero
                 Dim origen As Pila = pilas(jugada(4))
                 Dim destino As Pila = pilas(jugada(1))
 
-                If (origen.Count > 0) Then origen.obtenerCarta(origen.Count - 1).esVisible = jugada(8)
-                If (destino.Count > 0) Then destino.obtenerCarta(destino.Count - 1).esVisible = jugada(7)
+                If (origen.Count > 0) Then
+                    origen.obtenerCarta(origen.Count - 1).esVisible = jugada(8)
+                    If Not jugada(8) Then voltearAbajoCartas(jugada(4), origen.Count - 1)
+                End If
+                If (destino.Count > 0) Then
+                    destino.obtenerCarta(destino.Count - 1).esVisible = jugada(7)
+                    If Not jugada(7) Then voltearAbajoCartas(jugada(1), destino.Count - 1)
+                End If
 
                 cartasSeleccionadas = jugada(2)
                 botonesSeleccionados = jugada(3)
                 ColocarCartas(jugada(1), True, False)
-                'Devolviendo las cartas y botones del destino'
-                ''For i = 0 To listaCartas.Count - 1
-                ''destino.Insert(listaCartas.obtenerCarta(i))
-                ''listaBotones(i).Visible = True
-                ''listaBotones(i).Enabled = True
-                ''botones(jugada(1)).Add(listaBotones(i))
-                ''listaBotones(i).Location = calcularPosicion(jugada(1), botones(jugada(1)).Count - 1)
-                ''Next
 
                 cartasSeleccionadas = jugada(5)
                 botonesSeleccionados = jugada(6)
                 ColocarCartas(jugada(4), True, False)
-                'Devolviendo las cartas y botones del origen'
-                ''For i = 0 To listaCartas.Count - 1
-                ''origen.Insert(listaCartas.obtenerCarta(i))
-                ''listaBotones(i).Visible = True
-                ''listaBotones(i).Enabled = True
-                ''listaBotones(i).Location = calcularPosicion(jugada(4), botones(jugada(4)).Count - 1)
-                ''botones(jugada(4)).Add(listaBotones(i))
-                ''Next
+
+                faltan += 1
                 restarPuntos(99)
             End If
         End If
@@ -544,6 +560,9 @@ Public Class Tablero
         Dim b As PictureBox = DirectCast(sender, PictureBox)
         If (Not IsNothing(b)) Then
             indicesAnteriores = ObtenerIndices(b)
+
+            If (Not pilas(indicesAnteriores(0)).obtenerCarta(indicesAnteriores(1)).esMobilbe) Then Return
+
             coordenadas.Y = MousePosition.Y - sender.top
             coordenadas.X = MousePosition.X - sender.left
             Dim origen As Pila = pilas(indicesAnteriores(0))
@@ -612,6 +631,10 @@ Public Class Tablero
 
     Private Sub btn_Repartir_Click(sender As Object, e As EventArgs)
         Dim b As PictureBox = DirectCast(sender, PictureBox)
+        Repartir(b)
+    End Sub
+
+    Private Sub Repartir(b As PictureBox)
         b.Dispose()
         botonesRepartir.Remove(b)
         panel_contenedor.Controls.Remove(b)
@@ -625,6 +648,9 @@ Public Class Tablero
             End If
         Next
         Dim jugada() = {2, pilas.Length - 1}
+        Dim llamada() = {1, matrizPosibles}
+        llamadas.Push(llamada)
+        prepararAutoSolcion()
         registro.Push(jugada)
         restarPuntos()
     End Sub
@@ -670,4 +696,168 @@ Public Class Tablero
     Private Sub btnAnterior_Click(sender As Object, e As EventArgs) Handles btnAnterior.Click
         nudNumeroTablero.Value -= 1
     End Sub
+
+    Private Sub prepararAutoSolcion()
+        For i = 0 To 9
+            matrizPosibles(i) = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}.ToList()
+        Next
+    End Sub
+
+    Private Sub obtenerCartaMobible(cartas As Integer)
+        Dim pila As Pila = pilas(cartas)
+        Dim pos = pila.Count - 1
+        If (pos >= 0) Then
+            Dim carta = pila.obtenerCarta(pos)
+            Dim cartaAnt = pila.obtenerCarta(pos)
+            cartasSeleccionadas.getElementos().Insert(0, carta)
+            cartasSeleccionadas.getCartaMayor = carta
+            cartasSeleccionadas.getCartaMenor = carta
+            pila.Remove(carta)
+            botonesSeleccionados.Insert(0, botones(cartas)(pos))
+            botones(cartas).Remove(botones(cartas)(pos))
+            indicesAnteriores = {cartas, pos}
+            For i = 1 To pos
+                cartaAnt = carta
+                carta = pila.obtenerCarta(pos - i)
+                If (carta.esVisible AndAlso carta.numero - cartaAnt.numero = 1 AndAlso carta.familia.Nombre.Equals(cartaAnt.familia.Nombre)) Then
+                    cartasSeleccionadas.getElementos().Insert(0, carta)
+                    cartasSeleccionadas.getCartaMayor = carta
+                    pila.Remove(carta)
+                    botonesSeleccionados.Insert(0, botones(cartas)(pos - i))
+                    botones(cartas).Remove(botones(cartas)(pos - i))
+                    indicesAnteriores = {cartas, pos - i}
+                Else
+                    Exit For
+                End If
+            Next
+        End If
+    End Sub
+    Private Function autoColocarCarta(pos As Integer)
+        Dim destino = pilas(pos)
+        Dim cartas As Pila
+        Dim carta As Carta
+        Dim cartaAnterior As Carta
+        Dim mismaFamilia As Boolean = False
+        Dim posiciones As List(Of Integer) = matrizPosibles(pos)
+        Dim posible As Integer = -1
+        Dim nuevasPos = posiciones.ToArray().ToList()
+        If (destino.Count > 0) Then
+            obtenerCartaMobible(pos)
+            carta = destino.obtenerCarta(destino.Count - 1)
+            cartaAnterior = cartasSeleccionadas.getCartaMayor
+
+            If (Not IsNothing(cartaAnterior) AndAlso Not IsNothing(carta) AndAlso
+                cartaAnterior.esVisible AndAlso carta.esVisible AndAlso
+                carta.numero - cartaAnterior.numero = 1) Then mismaFamilia = True
+
+            For Each posicion In nuevasPos
+                destino = pilas(posicion)
+                carta = destino.getCartaMenor
+                cartaAnterior = cartasSeleccionadas.getCartaMayor
+                'Posible bug carta puede ser null pero enteoria se valida con es vacia'
+                If (Not destino.esVacia AndAlso carta.numero - cartaAnterior.numero = 1 AndAlso posiciones.Contains(posicion)) Then
+                    If (carta.familia.Nombre.Equals(cartaAnterior.familia.Nombre)) Then
+                        ColocarCartas(posicion)
+                        matrizPosibles(pos).Remove(posicion)
+                        llamadas.Push({1, matrizPosibles.ToArray()})
+                        matrizPosibles(pos) = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}.ToList()
+                        matrizPosibles(pos).Remove(pos)
+
+                        For i = 0 To 9
+                            matrizPosibles(i).Add(pos)
+                        Next
+                        Return True
+
+                    ElseIf (Not mismaFamilia) Then
+                        posible = posicion
+                    End If
+                Else
+                    posiciones.Remove(posicion)
+                End If
+            Next
+            If (posible <> -1) Then
+                ColocarCartas(posible)
+                posiciones.Remove(posible)
+                matrizPosibles(pos) = posiciones
+                llamadas.Push({1, matrizPosibles.ToArray()})
+                matrizPosibles(pos) = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}.ToList()
+                matrizPosibles(pos).Remove(pos)
+
+                For i = 0 To 9
+                    If (pos <> i) Then
+                        ''matrizPosibles(i)(0).Remove(posible)
+                        matrizPosibles(i).Add(pos)
+                    End If
+                Next
+                Return False
+            End If
+        End If
+        pilas(pos).InserForce(cartasSeleccionadas)
+        For Each btn In botonesSeleccionados
+            botones(pos).Add(btn)
+        Next
+        cartasSeleccionadas = New Pila()
+        botonesSeleccionados.Clear()
+        Return False
+    End Function
+
+    Private Sub btn_ColocarCarta_Click(sender As Object, e As EventArgs) Handles btn_ColocarCarta.Click
+        llamarAuto()
+    End Sub
+
+    Private Sub llamarAuto()
+        AutoSolucionar()
+    End Sub
+
+    Private Function AutoSolucionar(Optional back = False)
+        Dim intentos = 0
+        Dim inserto = False
+
+        While intentos < 2
+            inserto = False
+            For i = 0 To 9
+                If (autoColocarCarta(i)) Then
+                    inserto = True
+                End If
+            Next
+            If (Not inserto) Then
+                intentos += 1
+            End If
+        End While
+
+        If (faltan = 0) Then
+            Return True
+        ElseIf (puntos <= 0) Then
+            Return False
+        ElseIf ((botonesRepartir.Count > 0 And Not back) OrElse (botonesRepartir.Count > 0 And (back And inserto))) Then
+            Repartir(botonesRepartir(botonesRepartir.Count - 1))
+            Return AutoSolucionar()
+        Else
+            Backtrack()
+            Return AutoSolucionar(True)
+        End If
+        Return False
+    End Function
+
+    Private Sub Backtrack()
+        If (registro.Count > 0 And llamadas.Count > 0) Then
+            volver()
+            Dim llamada = llamadas.Pop ''{tipo,orige,origen posiciones, destino,destino posiciones}
+            If (llamada(0) = 0) Then
+                matrizPosibles(llamada(1))(0) = llamada(2)
+                matrizPosibles(llamada(3))(0) = llamada(4)
+            ElseIf llamada(0) = 1 Then
+                For i = 0 To 9
+                    matrizPosibles(i) = DirectCast(llamada(1)(i), List(Of Integer)).ToList()
+                Next
+            End If
+        End If
+    End Sub
+
+    Private Sub BackTracking_Click(sender As Object, e As EventArgs) Handles BackTracking.Click
+        If (registro.Count > 0 And llamadas.Count > 0) Then
+            Backtrack()
+        End If
+    End Sub
+
 End Class
