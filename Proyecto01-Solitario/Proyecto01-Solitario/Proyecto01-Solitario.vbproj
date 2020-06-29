@@ -206,6 +206,11 @@
     <Content Include="Cartas\Qpicas.jpg" />
     <Content Include="Cartas\Qtreboles.jpg" />
     <Content Include="Cartas\volteada.jpg" />
+    <None Include="Resources\retroceder.png" />
+    <None Include="Resources\autosolucion.png" />
+    <None Include="Resources\adelante.png" />
+    <None Include="Resources\seleccionar.png" />
+    <None Include="Resources\atras.png" />
     <None Include="Resources\BotonCrear.png" />
     <None Include="Resources\FondoBarajas.png" />
     <None Include="Resources\info.png" />

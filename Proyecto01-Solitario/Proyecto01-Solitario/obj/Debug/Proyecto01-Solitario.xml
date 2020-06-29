@@ -22,6 +22,21 @@ Proyecto01-Solitario
   búsquedas de recursos mediante esta clase de recurso fuertemente tipado.
 </summary>
 </member>
+<member name="P:Proyecto01_Solitario.My.Resources.Resources.adelante">
+<summary>
+  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Proyecto01_Solitario.My.Resources.Resources.atras">
+<summary>
+  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Proyecto01_Solitario.My.Resources.Resources.autosolucion">
+<summary>
+  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+</summary>
+</member>
 <member name="P:Proyecto01_Solitario.My.Resources.Resources.BotonCrear">
 <summary>
   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
@@ -48,6 +63,16 @@ Proyecto01-Solitario
 </summary>
 </member>
 <member name="P:Proyecto01_Solitario.My.Resources.Resources.Play">
+<summary>
+  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Proyecto01_Solitario.My.Resources.Resources.retroceder">
+<summary>
+  Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+</summary>
+</member>
+<member name="P:Proyecto01_Solitario.My.Resources.Resources.seleccionar">
 <summary>
   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
 </summary>

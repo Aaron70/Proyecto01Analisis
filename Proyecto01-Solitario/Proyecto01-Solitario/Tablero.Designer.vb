@@ -23,19 +23,23 @@ Partial Class Tablero
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.panel_contenedor = New System.Windows.Forms.Panel()
-        Me.btn_ColocarCarta = New System.Windows.Forms.Button()
         Me.Puntaje = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.btnSiguiente = New System.Windows.Forms.Button()
-        Me.btnJugar = New System.Windows.Forms.Button()
-        Me.btnAnterior = New System.Windows.Forms.Button()
         Me.lbNumeroTablero = New System.Windows.Forms.Label()
         Me.nudNumeroTablero = New System.Windows.Forms.NumericUpDown()
-        Me.btn_atras = New System.Windows.Forms.Button()
-        Me.BackTracking = New System.Windows.Forms.Button()
+        Me.btn_atras = New System.Windows.Forms.PictureBox()
+        Me.btn_ColocarCarta = New System.Windows.Forms.PictureBox()
+        Me.btnSiguiente = New System.Windows.Forms.PictureBox()
+        Me.btnJugar = New System.Windows.Forms.PictureBox()
+        Me.btnAnterior = New System.Windows.Forms.PictureBox()
         Me.panel_contenedor.SuspendLayout()
         CType(Me.nudNumeroTablero, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.btn_atras, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.btn_ColocarCarta, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.btnSiguiente, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.btnJugar, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.btnAnterior, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'panel_contenedor
@@ -44,108 +48,59 @@ Partial Class Tablero
         Me.panel_contenedor.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.panel_contenedor.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(64, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.panel_contenedor.BackColor = System.Drawing.SystemColors.ControlDark
-        Me.panel_contenedor.Controls.Add(Me.BackTracking)
+        Me.panel_contenedor.BackColor = System.Drawing.Color.DarkSlateGray
+        Me.panel_contenedor.Controls.Add(Me.btn_atras)
         Me.panel_contenedor.Controls.Add(Me.btn_ColocarCarta)
-        Me.panel_contenedor.Controls.Add(Me.Puntaje)
-        Me.panel_contenedor.Controls.Add(Me.Label2)
-        Me.panel_contenedor.Controls.Add(Me.Label1)
         Me.panel_contenedor.Controls.Add(Me.btnSiguiente)
         Me.panel_contenedor.Controls.Add(Me.btnJugar)
         Me.panel_contenedor.Controls.Add(Me.btnAnterior)
+        Me.panel_contenedor.Controls.Add(Me.Puntaje)
+        Me.panel_contenedor.Controls.Add(Me.Label2)
+        Me.panel_contenedor.Controls.Add(Me.Label1)
         Me.panel_contenedor.Controls.Add(Me.lbNumeroTablero)
         Me.panel_contenedor.Controls.Add(Me.nudNumeroTablero)
-        Me.panel_contenedor.Controls.Add(Me.btn_atras)
         Me.panel_contenedor.Location = New System.Drawing.Point(0, 0)
         Me.panel_contenedor.Margin = New System.Windows.Forms.Padding(2)
         Me.panel_contenedor.Name = "panel_contenedor"
         Me.panel_contenedor.Size = New System.Drawing.Size(1002, 570)
         Me.panel_contenedor.TabIndex = 0
         '
-        'btn_ColocarCarta
-        '
-        Me.btn_ColocarCarta.Location = New System.Drawing.Point(430, 13)
-        Me.btn_ColocarCarta.Name = "btn_ColocarCarta"
-        Me.btn_ColocarCarta.Size = New System.Drawing.Size(125, 41)
-        Me.btn_ColocarCarta.TabIndex = 10
-        Me.btn_ColocarCarta.Text = "Colocar Carta"
-        Me.btn_ColocarCarta.UseVisualStyleBackColor = True
-        '
         'Puntaje
         '
         Me.Puntaje.AutoSize = True
         Me.Puntaje.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Puntaje.Location = New System.Drawing.Point(213, 11)
+        Me.Puntaje.Location = New System.Drawing.Point(284, 13)
         Me.Puntaje.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Puntaje.Name = "Puntaje"
         Me.Puntaje.Size = New System.Drawing.Size(87, 18)
-        Me.Puntaje.Location = New System.Drawing.Point(284, 13)
-        Me.Puntaje.Name = "Puntaje"
-        Me.Puntaje.Size = New System.Drawing.Size(108, 24)
         Me.Puntaje.TabIndex = 9
         Me.Puntaje.Text = "Puntos: 500"
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(201, 536)
+        Me.Label2.Location = New System.Drawing.Point(254, 591)
         Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(56, 13)
-        Me.Label2.Location = New System.Drawing.Point(254, 591)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(73, 17)
         Me.Label2.TabIndex = 8
         Me.Label2.Text = "Undefined"
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(150, 536)
+        Me.Label1.Location = New System.Drawing.Point(185, 591)
         Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(56, 13)
-        Me.Label1.Location = New System.Drawing.Point(185, 591)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(73, 17)
         Me.Label1.TabIndex = 7
         Me.Label1.Text = "Undefined"
-        '
-        'btnSiguiente
-        '
-        Me.btnSiguiente.Location = New System.Drawing.Point(85, 508)
-        Me.btnSiguiente.Margin = New System.Windows.Forms.Padding(2)
-        Me.btnSiguiente.Name = "btnSiguiente"
-        Me.btnSiguiente.Size = New System.Drawing.Size(56, 19)
-        Me.btnSiguiente.TabIndex = 6
-        Me.btnSiguiente.Text = "Siguiente"
-        Me.btnSiguiente.UseVisualStyleBackColor = True
-        '
-        'btnJugar
-        '
-        Me.btnJugar.Location = New System.Drawing.Point(54, 531)
-        Me.btnJugar.Margin = New System.Windows.Forms.Padding(2)
-        Me.btnJugar.Name = "btnJugar"
-        Me.btnJugar.Size = New System.Drawing.Size(56, 19)
-        Me.btnJugar.TabIndex = 5
-        Me.btnJugar.Text = "Jugar"
-        Me.btnJugar.UseVisualStyleBackColor = True
-        '
-        'btnAnterior
-        '
-        Me.btnAnterior.Location = New System.Drawing.Point(24, 508)
-        Me.btnAnterior.Margin = New System.Windows.Forms.Padding(2)
-        Me.btnAnterior.Name = "btnAnterior"
-        Me.btnAnterior.Size = New System.Drawing.Size(56, 19)
-        Me.btnAnterior.TabIndex = 4
-        Me.btnAnterior.Text = "Anterior"
-        Me.btnAnterior.UseVisualStyleBackColor = True
         '
         'lbNumeroTablero
         '
         Me.lbNumeroTablero.AutoSize = True
-        Me.lbNumeroTablero.Location = New System.Drawing.Point(37, 458)
+        Me.lbNumeroTablero.ForeColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.lbNumeroTablero.Location = New System.Drawing.Point(52, 555)
         Me.lbNumeroTablero.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lbNumeroTablero.Name = "lbNumeroTablero"
         Me.lbNumeroTablero.Size = New System.Drawing.Size(96, 13)
@@ -154,7 +109,7 @@ Partial Class Tablero
         '
         'nudNumeroTablero
         '
-        Me.nudNumeroTablero.Location = New System.Drawing.Point(24, 485)
+        Me.nudNumeroTablero.Location = New System.Drawing.Point(46, 533)
         Me.nudNumeroTablero.Margin = New System.Windows.Forms.Padding(2)
         Me.nudNumeroTablero.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
         Me.nudNumeroTablero.Name = "nudNumeroTablero"
@@ -164,22 +119,53 @@ Partial Class Tablero
         '
         'btn_atras
         '
-        Me.btn_atras.Location = New System.Drawing.Point(140, 10)
-        Me.btn_atras.Margin = New System.Windows.Forms.Padding(2)
+        Me.btn_atras.Image = Global.Proyecto01_Solitario.My.Resources.Resources.retroceder
+        Me.btn_atras.Location = New System.Drawing.Point(158, 9)
         Me.btn_atras.Name = "btn_atras"
-        Me.btn_atras.Size = New System.Drawing.Size(53, 34)
-        Me.btn_atras.TabIndex = 1
-        Me.btn_atras.Text = "Atras"
-        Me.btn_atras.UseVisualStyleBackColor = True
+        Me.btn_atras.Size = New System.Drawing.Size(97, 47)
+        Me.btn_atras.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.btn_atras.TabIndex = 15
+        Me.btn_atras.TabStop = False
         '
-        'BackTracking
+        'btn_ColocarCarta
         '
-        Me.BackTracking.Location = New System.Drawing.Point(575, 12)
-        Me.BackTracking.Name = "BackTracking"
-        Me.BackTracking.Size = New System.Drawing.Size(119, 42)
-        Me.BackTracking.TabIndex = 11
-        Me.BackTracking.Text = "BackTrack"
-        Me.BackTracking.UseVisualStyleBackColor = True
+        Me.btn_ColocarCarta.Image = Global.Proyecto01_Solitario.My.Resources.Resources.autosolucion
+        Me.btn_ColocarCarta.Location = New System.Drawing.Point(418, 3)
+        Me.btn_ColocarCarta.Name = "btn_ColocarCarta"
+        Me.btn_ColocarCarta.Size = New System.Drawing.Size(142, 53)
+        Me.btn_ColocarCarta.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.btn_ColocarCarta.TabIndex = 14
+        Me.btn_ColocarCarta.TabStop = False
+        '
+        'btnSiguiente
+        '
+        Me.btnSiguiente.Image = Global.Proyecto01_Solitario.My.Resources.Resources.adelante
+        Me.btnSiguiente.Location = New System.Drawing.Point(158, 474)
+        Me.btnSiguiente.Name = "btnSiguiente"
+        Me.btnSiguiente.Size = New System.Drawing.Size(56, 52)
+        Me.btnSiguiente.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.btnSiguiente.TabIndex = 13
+        Me.btnSiguiente.TabStop = False
+        '
+        'btnJugar
+        '
+        Me.btnJugar.Image = Global.Proyecto01_Solitario.My.Resources.Resources.seleccionar
+        Me.btnJugar.Location = New System.Drawing.Point(79, 473)
+        Me.btnJugar.Name = "btnJugar"
+        Me.btnJugar.Size = New System.Drawing.Size(59, 54)
+        Me.btnJugar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.btnJugar.TabIndex = 12
+        Me.btnJugar.TabStop = False
+        '
+        'btnAnterior
+        '
+        Me.btnAnterior.Image = Global.Proyecto01_Solitario.My.Resources.Resources.atras
+        Me.btnAnterior.Location = New System.Drawing.Point(7, 473)
+        Me.btnAnterior.Name = "btnAnterior"
+        Me.btnAnterior.Size = New System.Drawing.Size(57, 55)
+        Me.btnAnterior.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.btnAnterior.TabIndex = 11
+        Me.btnAnterior.TabStop = False
         '
         'Tablero
         '
@@ -193,20 +179,24 @@ Partial Class Tablero
         Me.panel_contenedor.ResumeLayout(False)
         Me.panel_contenedor.PerformLayout()
         CType(Me.nudNumeroTablero, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.btn_atras, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.btn_ColocarCarta, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.btnSiguiente, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.btnJugar, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.btnAnterior, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
 
     Friend WithEvents panel_contenedor As Panel
-    Friend WithEvents btn_atras As Button
     Friend WithEvents lbNumeroTablero As Label
     Friend WithEvents nudNumeroTablero As NumericUpDown
-    Friend WithEvents btnSiguiente As Button
-    Friend WithEvents btnJugar As Button
-    Friend WithEvents btnAnterior As Button
     Friend WithEvents Label2 As Label
     Friend WithEvents Label1 As Label
     Friend WithEvents Puntaje As Label
-    Friend WithEvents btn_ColocarCarta As Button
-    Friend WithEvents BackTracking As Button
+    Friend WithEvents btnJugar As PictureBox
+    Friend WithEvents btnAnterior As PictureBox
+    Friend WithEvents btnSiguiente As PictureBox
+    Friend WithEvents btn_ColocarCarta As PictureBox
+    Friend WithEvents btn_atras As PictureBox
 End Class

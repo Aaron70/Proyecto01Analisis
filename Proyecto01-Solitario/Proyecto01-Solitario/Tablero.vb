@@ -110,9 +110,9 @@ Public Class Tablero
         btn_ColocarCarta.Visible = flag
         panel_contenedor.Controls.Add(btn_ColocarCarta)
 
-        BackTracking.Enabled = flag
-        BackTracking.Visible = flag
-        panel_contenedor.Controls.Add(BackTracking)
+        ' BackTracking.Enabled = flag
+        'BackTracking.Visible = flag
+        'panel_contenedor.Controls.Add(BackTracking)
 
         If (flag) Then panel_contenedor.Controls.Add(Puntaje)
 
@@ -180,8 +180,6 @@ Public Class Tablero
         Dim posK As Integer = destinoCartas.validarComlumnaKAS(cartasSeleccionadas) 'Valida si ya se completo una columna'
         Dim visibleOrigen = True
         Dim visibleDestino = True
-        Dim carta As Carta
-        Dim boton As PictureBox
         Dim y = destinoCartas.Count
 
         If (posK <> -1) Then 'Validar si al insertar estoy completando una columna'
@@ -655,11 +653,11 @@ Public Class Tablero
         restarPuntos()
     End Sub
 
-    Private Sub btn_atras_Click(sender As Object, e As EventArgs) Handles btn_atras.Click
+    Private Sub btn_atras_Click(sender As Object, e As EventArgs)
         volver()
     End Sub
 
-    Private Sub btnSiguiente_Click(sender As Object, e As EventArgs) Handles btnSiguiente.Click
+    Private Sub btnSiguiente_Click(sender As Object, e As EventArgs)
         nudNumeroTablero.Value += 1
     End Sub
 
@@ -674,7 +672,7 @@ Public Class Tablero
         CambiarMazo()
     End Sub
 
-    Private Sub btnJugar_Click(sender As Object, e As EventArgs) Handles btnJugar.Click
+    Private Sub btnJugar_Click(sender As Object, e As EventArgs)
         For i = 0 To pilas.Length - 1
             For j = 0 To pilas(i).Count - 1
                 If (pilas(i).obtenerCarta(j).esVisible) Then
@@ -693,7 +691,7 @@ Public Class Tablero
         Barajas.RBunaFamilia.Checked = True
     End Sub
 
-    Private Sub btnAnterior_Click(sender As Object, e As EventArgs) Handles btnAnterior.Click
+    Private Sub btnAnterior_Click(sender As Object, e As EventArgs)
         nudNumeroTablero.Value -= 1
     End Sub
 
@@ -735,7 +733,6 @@ Public Class Tablero
     End Sub
     Private Function autoColocarCarta(pos As Integer)
         Dim destino = pilas(pos)
-        Dim cartas As Pila
         Dim carta As Carta
         Dim cartaAnterior As Carta
         Dim mismaFamilia As Boolean = False
@@ -804,7 +801,7 @@ Public Class Tablero
         Return False
     End Function
 
-    Private Sub btn_ColocarCarta_Click(sender As Object, e As EventArgs) Handles btn_ColocarCarta.Click
+    Private Sub btn_ColocarCarta_Click(sender As Object, e As EventArgs)
         llamarAuto()
     End Sub
 
@@ -862,10 +859,46 @@ Public Class Tablero
         End If
     End Sub
 
-    Private Sub BackTracking_Click(sender As Object, e As EventArgs) Handles BackTracking.Click
+    Private Sub BackTracking_Click(sender As Object, e As EventArgs)
         If (registro.Count > 0 And llamadas.Count > 0) Then
             Backtrack()
         End If
     End Sub
 
+    Private Sub PictureBox1_Click(sender As Object, e As EventArgs) Handles btnAnterior.Click
+        If (nudNumeroTablero.Value <> 1) Then
+            nudNumeroTablero.Value -= 1
+        Else
+            nudNumeroTablero.Value = Barajas.reparticiones.Count
+        End If
+    End Sub
+
+    Private Sub PictureBox2_Click(sender As Object, e As EventArgs) Handles btnJugar.Click
+        For i = 0 To pilas.Length - 1
+            For j = 0 To pilas(i).Count - 1
+                If (pilas(i).obtenerCarta(j).esVisible) Then
+                    botones(i)(j).Enabled = True
+                End If
+            Next
+        Next
+        controlJuego(True)
+        controlIndicadores(False)
+    End Sub
+
+    Private Sub PictureBox3_Click(sender As Object, e As EventArgs) Handles btnSiguiente.Click
+        If (nudNumeroTablero.Value = Barajas.reparticiones.Count) Then
+            nudNumeroTablero.Value = 1
+        Else
+            nudNumeroTablero.Value += 1
+        End If
+
+    End Sub
+
+    Private Sub PictureBox1_Click_1(sender As Object, e As EventArgs) Handles btn_ColocarCarta.Click
+        llamarAuto()
+    End Sub
+
+    Private Sub PictureBox1_Click_2(sender As Object, e As EventArgs) Handles btn_atras.Click
+        volver()
+    End Sub
 End Class
