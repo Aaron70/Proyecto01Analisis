@@ -25,8 +25,8 @@ Public Class Tablero
     Private LARGOCARTAS As Integer = 145
     Private PORCENTAJELARGOVISIBLE As Decimal = 0.17
     Private PORCENTAJELARGONOVISIBLE As Decimal = 0.15
-    Private OFFSETX As Integer = 130
-    Private OFFSETY As Integer = 150
+    Private OFFSETX As Integer = 70
+    Private OFFSETY As Integer = 160
 
     Private matrizPosibles(10) As List(Of Integer)
 
@@ -253,7 +253,7 @@ Public Class Tablero
             Next
 
         End If
-        botonesSeleccionados.Clear()
+        botonesSeleccionados = New List(Of PictureBox)
         cartasSeleccionadas = New Pila()
         If (botones(pos).Count > 0) Then
             indicesAnteriores = ObtenerIndices(botones(pos)(0))
@@ -690,6 +690,7 @@ Public Class Tablero
         Main.Visible = True
         Barajas.reparticiones = Nothing
         Barajas.NumeroBarajas.Value = 1
+        Barajas.RBunaFamilia.Checked = True
     End Sub
 
     Private Sub btnAnterior_Click(sender As Object, e As EventArgs) Handles btnAnterior.Click
@@ -702,18 +703,24 @@ Public Class Tablero
         Next
     End Sub
 
-    Private Sub obtenerCartaMobible(cartas As Integer)
+    Private Function obtenerCartaMobible(cartas As Integer, Optional flag As Boolean = False)
         Dim pila As Pila = pilas(cartas)
         Dim pos = pila.Count - 1
+        Dim stack As New Stack
+        If (flag) Then
+            stack.Push({cartasSeleccionadas, botonesSeleccionados, indicesAnteriores})
+        End If
         If (pos >= 0) Then
             Dim carta = pila.obtenerCarta(pos)
             Dim cartaAnt = pila.obtenerCarta(pos)
             cartasSeleccionadas.getElementos().Insert(0, carta)
             cartasSeleccionadas.getCartaMayor = carta
             cartasSeleccionadas.getCartaMenor = carta
-            pila.Remove(carta)
             botonesSeleccionados.Insert(0, botones(cartas)(pos))
-            botones(cartas).Remove(botones(cartas)(pos))
+            If (Not flag) Then
+                botones(cartas).Remove(botones(cartas)(pos))
+                pila.Remove(carta)
+            End If
             indicesAnteriores = {cartas, pos}
             For i = 1 To pos
                 cartaAnt = carta
@@ -721,16 +728,28 @@ Public Class Tablero
                 If (carta.esVisible AndAlso carta.numero - cartaAnt.numero = 1 AndAlso carta.familia.Nombre.Equals(cartaAnt.familia.Nombre)) Then
                     cartasSeleccionadas.getElementos().Insert(0, carta)
                     cartasSeleccionadas.getCartaMayor = carta
-                    pila.Remove(carta)
                     botonesSeleccionados.Insert(0, botones(cartas)(pos - i))
-                    botones(cartas).Remove(botones(cartas)(pos - i))
+                    If (Not flag) Then
+                        botones(cartas).Remove(botones(cartas)(pos - i))
+                        pila.Remove(carta)
+                    End If
                     indicesAnteriores = {cartas, pos - i}
                 Else
                     Exit For
                 End If
             Next
         End If
-    End Sub
+        If (flag) Then
+            Dim backup = stack.Pop()
+            cartasSeleccionadas = backup(0)
+            botonesSeleccionados = backup(1)
+            indicesAnteriores = backup(2)
+            Dim listaCartas As Pila = cartasSeleccionadas
+            Dim botones As List(Of PictureBox) = botonesSeleccionados
+            Return {listaCartas, botones, indicesAnteriores}
+        End If
+        Return {cartasSeleccionadas, botonesSeleccionados, indicesAnteriores}
+    End Function
     Private Function autoColocarCarta(pos As Integer)
         Dim destino = pilas(pos)
         Dim cartas As Pila
@@ -740,6 +759,7 @@ Public Class Tablero
         Dim posiciones As List(Of Integer) = matrizPosibles(pos)
         Dim posible As Integer = -1
         Dim nuevasPos = posiciones.ToArray().ToList()
+
         If (destino.Count > 0) Then
             obtenerCartaMobible(pos)
             carta = destino.obtenerCarta(destino.Count - 1)
@@ -754,8 +774,8 @@ Public Class Tablero
                 carta = destino.getCartaMenor
                 cartaAnterior = cartasSeleccionadas.getCartaMayor
                 'Posible bug carta puede ser null pero enteoria se valida con es vacia'
-                If (Not destino.esVacia AndAlso carta.numero - cartaAnterior.numero = 1 AndAlso posiciones.Contains(posicion)) Then
-                    If (carta.familia.Nombre.Equals(cartaAnterior.familia.Nombre)) Then
+                If ((Not pilas(pos).esVacia AndAlso destino.esVacia) OrElse Not destino.esVacia AndAlso carta.numero - cartaAnterior.numero = 1 AndAlso posiciones.Contains(posicion) AndAlso pos <> posicion) Then
+                    If ((Not pilas(pos).esVacia AndAlso destino.esVacia) OrElse Not destino.esVacia AndAlso carta.familia.Nombre.Equals(cartaAnterior.familia.Nombre)) Then
                         ColocarCartas(posicion)
                         matrizPosibles(pos).Remove(posicion)
                         llamadas.Push({1, matrizPosibles.ToArray()})
@@ -765,6 +785,7 @@ Public Class Tablero
                         For i = 0 To 9
                             matrizPosibles(i).Add(pos)
                         Next
+
                         Return True
 
                     ElseIf (Not mismaFamilia) Then
@@ -775,22 +796,23 @@ Public Class Tablero
                 End If
             Next
             If (posible <> -1) Then
-                ColocarCartas(posible)
-                posiciones.Remove(posible)
-                matrizPosibles(pos) = posiciones
-                llamadas.Push({1, matrizPosibles.ToArray()})
-                matrizPosibles(pos) = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}.ToList()
-                matrizPosibles(pos).Remove(pos)
 
-                For i = 0 To 9
-                    If (pos <> i) Then
-                        ''matrizPosibles(i)(0).Remove(posible)
-                        matrizPosibles(i).Add(pos)
-                    End If
-                Next
-                Return False
+                ColocarCartas(posible)
+                    posiciones.Remove(posible)
+                    matrizPosibles(pos) = posiciones
+                    llamadas.Push({1, matrizPosibles.ToArray()})
+                    matrizPosibles(pos) = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}.ToList()
+                    matrizPosibles(pos).Remove(pos)
+
+                    For i = 0 To 9
+                        If (pos <> i) Then
+                            ''matrizPosibles(i)(0).Remove(posible)
+                            matrizPosibles(i).Add(pos)
+                        End If
+                    Next
+                    Return False
+                End If
             End If
-        End If
         pilas(pos).InserForce(cartasSeleccionadas)
         For Each btn In botonesSeleccionados
             botones(pos).Add(btn)
@@ -808,9 +830,14 @@ Public Class Tablero
         AutoSolucionar()
     End Sub
 
+
+
+
+
     Private Function AutoSolucionar(Optional back = False)
         Dim intentos = 0
         Dim inserto = False
+
 
         While intentos < 2
             inserto = False
@@ -820,6 +847,7 @@ Public Class Tablero
                 End If
             Next
             If (Not inserto) Then
+                ''buscarComplemento()
                 intentos += 1
             End If
         End While
@@ -830,13 +858,20 @@ Public Class Tablero
             Return False
         ElseIf ((botonesRepartir.Count > 0 And Not back) OrElse (botonesRepartir.Count > 0 And (back And inserto))) Then
             Repartir(botonesRepartir(botonesRepartir.Count - 1))
+            Me.Update()
             Return AutoSolucionar()
         Else
+            'Ya no hay ni un movimiento que hacer se encicla aqui porque hizo demasiado backtrack'
             Backtrack()
+            Me.Update()
             Return AutoSolucionar(True)
         End If
         Return False
     End Function
+
+    Private Sub buscarComplemento(pos)
+
+    End Sub
 
     Private Sub Backtrack()
         If (registro.Count > 0 And llamadas.Count > 0) Then

@@ -206,6 +206,12 @@
     <Content Include="Cartas\Qpicas.jpg" />
     <Content Include="Cartas\Qtreboles.jpg" />
     <Content Include="Cartas\volteada.jpg" />
+    <None Include="Resources\BotonCrear.png" />
+    <None Include="Resources\FondoBarajas.png" />
+    <None Include="Resources\info.png" />
+    <None Include="Resources\botonPlay.png" />
+    <None Include="Resources\FondoMain.png" />
+    <None Include="Resources\Play.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

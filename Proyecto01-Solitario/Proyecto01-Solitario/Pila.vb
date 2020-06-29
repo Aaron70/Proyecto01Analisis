@@ -61,6 +61,7 @@ Public Class Pila
             cartaMayor = value
         End Set
     End Property
+
     'En una totalmente llena el K seria el numero mayor y habria sido el primero en entrar y el As '
     Sub New()
         cartaMenor = Nothing
